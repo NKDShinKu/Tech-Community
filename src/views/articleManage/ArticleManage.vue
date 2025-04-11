@@ -2,7 +2,7 @@
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import ChannelSelect from './components/ChannelSelect.vue'
-import { artGetListService } from '@/api/article'
+import { artGetListService, artDelService } from '@/api/article'
 import { formatTime } from '@/utils/format'
 import ArticleEdit from './components/ArticleEdit.vue'
 
@@ -26,8 +26,15 @@ import ArticleEdit from './components/ArticleEdit.vue'
 
 // 编辑、删除方法
 const articleEditRef = ref()
-const onDeleteArticle = (row) => {
-  console.log(row)
+const onDeleteArticle = async (row) => {
+  await ElMessageBox.confirm('你确认删除该文章信息吗？', '温馨提示', {
+    type: 'warning',
+    confirmButtonText: '确认',
+    cancelButtonText: '取消'
+  })
+  await artDelService(row.id)
+  ElMessage({ type: 'success', message: '删除成功' })
+  getArticleList()
 }
 const onAddArticle = () => {
   articleEditRef.value.open({})
@@ -82,10 +89,18 @@ const onReset = () => {
   getArticleList()
 }
 
-
+// 添加修改成功
+const onSuccess = (type) => {
+  if (type === 'add') {
+    // 如果是添加，需要跳转渲染最后一页，编辑直接渲染当前页
+    const lastPage = Math.ceil((total.value + 1) / params.value.pagesize)
+    params.value.pagenum = lastPage
+  }
+  getArticleList()
+}
 </script>
 <template>
-  <ArticleEdit ref="articleEditRef"></ArticleEdit>
+  <ArticleEdit ref="articleEditRef" @success="onSuccess"></ArticleEdit>
   <page-container title="文章管理">
     <template #extra>
       <el-button type="primary" @click="onAddArticle()">发布文章</el-button>

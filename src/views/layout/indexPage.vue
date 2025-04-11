@@ -3,7 +3,7 @@
     <div class="nav-left">技术分享社区</div>
     <div class="nav-center">
       <router-link to="/article" :class="{ active: $route.path.includes('/article') }" class="nav-item">首页</router-link>
-      <router-link to="/about" :class="{ active: $route.path.includes('/about') }" class="nav-item">关于</router-link>
+      <router-link to="/about" :class="{ active: $route.path.includes('/about') }" class="nav-item">我的</router-link>
     </div>
     <div class="nav-right">
       <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />
@@ -32,8 +32,6 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { User, Notebook, SwitchButton } from '@element-plus/icons-vue'
-
-
 
 const handleCommand = async (command) => {
   if (command === 'logout') {

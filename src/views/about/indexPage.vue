@@ -1,6 +1,5 @@
-<script setup>
-</script>
+<script setup></script>
 <template>
-    <div>关于</div>
+  <div>我的</div>
 </template>
 <style scoped></style>
