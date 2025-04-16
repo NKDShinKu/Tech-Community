@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { userGetInfoService } from '@/api/user'
+import apiClient, { checkLoginStatus, refreshToken } from '@/api/api'
 
 export const useUserStore = defineStore(
   'big-user',
@@ -14,8 +15,14 @@ export const useUserStore = defineStore(
     }
     const user = ref({})
     const getUser = async () => {
-      const res = await userGetInfoService() // 请求获取数据
-      user.value = res.data.data
+      const status = await checkLoginStatus()
+      if (status.data.userId === 0) {
+        // 如果未登录，尝试刷新token
+        await refreshToken()
+      }
+      const res = await apiClient(`user/info/${status.data.userId}`) // 请求获取数据
+      user.value = res.data
+      console.log(user.value)
     }
     const setUser = (obj) => (user.value = obj)
     return {

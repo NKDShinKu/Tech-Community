@@ -4,6 +4,7 @@ import { ref, watch } from 'vue'
 import { userRegisterService, userLoginService } from '@/api/user'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+import apiClient from '@/api/api.ts'
 // 默认是否是注册页面
 const isRegister = ref(false)
 // 表单对象
@@ -68,9 +69,12 @@ watch(isRegister, () => {
 const userStore = useUserStore()
 const router = useRouter()
 const login = async () => {
-  await form.value.validate()
-  const res = await userLoginService(formModel.value)
-  userStore.setToken(res.data.token)
+  // await form.value.validate()
+  const res = await apiClient.post('/auth/signin',{
+    username: formModel.value.username,
+    password: formModel.value.password
+  })
+  // userStore.setToken(res.data.token)
   userStore.getUser()
   ElMessage.success('登录成功')
   router.push('/')

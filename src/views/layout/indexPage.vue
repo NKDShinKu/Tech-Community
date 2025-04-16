@@ -7,10 +7,10 @@
     </div>
     <div class="nav-right">
       <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />
-      <router-link v-if="userStore.token" to="/user" class="nav-item">
+      <router-link v-if="userStore.user" to="/user" class="nav-item">
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span>
-            <el-avatar :src="userStore.user.user_pic || avatar" />
+            <el-avatar :src="userStore.user.avatar || avatar" />
           </span>
           <template #dropdown>
             <el-dropdown-menu>
