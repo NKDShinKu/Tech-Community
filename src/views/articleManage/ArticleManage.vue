@@ -106,7 +106,7 @@ const onSuccess = (type) => {
       <el-button type="primary" @click="onAddArticle()">发布文章</el-button>
     </template>
     <!-- 头部 -->
-    <el-form inline>
+    <el-form style="display: flex; " inline>
       <el-form-item label="文章分类：">
         <channel-select v-model="params.cate_id"></channel-select>
       </el-form-item>

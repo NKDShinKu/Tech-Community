@@ -11,11 +11,13 @@ export const useUserStore = defineStore(
     }
     const removeToken = () => {
       token.value = ''
+      user.value = {}
     }
     const user = ref({})
     const getUser = async () => {
       const res = await userGetInfoService() // 请求获取数据
       user.value = res.data.data
+      console.log(user.value)
     }
     const setUser = (obj) => (user.value = obj)
     return {

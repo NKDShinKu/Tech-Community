@@ -36,6 +36,7 @@ instance.interceptors.response.use(
     })
     console.log(err)
     if (err.response?.status === 401) {
+      useUserStore().removeToken()
       router.push('/login')
     }
     return Promise.reject(err)

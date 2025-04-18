@@ -17,7 +17,8 @@ defineProps({
 </script>
 <template>
   <div class="card">
-    <RouterLink to="/detail/231">
+<!--    打开新页面-->
+    <RouterLink target="_blank" to="/detail/231">
       <div class="image">
         <img :src="cardImg" alt="" />
       </div>

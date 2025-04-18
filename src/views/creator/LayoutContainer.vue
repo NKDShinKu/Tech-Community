@@ -27,15 +27,25 @@ const onCommand = async (command) => {
     router.push(`/user/${command}`)
   }
 }
+
+// 退出登录
+const onLogout = async () => {
+  await ElMessageBox.confirm('你确认退出登录吗？', '温馨提示', {
+    type: 'warning',
+    confirmButtonText: '确认',
+    cancelButtonText: '取消'
+  })
+  userStore.removeToken()
+  userStore.setUser({})
+  router.push(`/login`)
+}
 </script>
 
 <template>
   <el-container class="layout-container">
     <el-aside width="200px">
-      <router-link to="/">
-        <div class="el-aside-logo">
-
-        </div>
+      <router-link class="back-to-home" to="/">
+        <el-button  type="primary">返回主页</el-button>
       </router-link>
 
       <el-menu :default-active="$route.path" text-color="#000000" router>
@@ -113,6 +123,12 @@ const onCommand = async (command) => {
 <style lang="scss" scoped>
 .layout-container {
   height: 100vh;
+  text-align: center;
+
+  .back-to-home{
+    display: block;
+    margin: 23px auto;
+  }
 
   .el-aside-logo {
     height: 150px;

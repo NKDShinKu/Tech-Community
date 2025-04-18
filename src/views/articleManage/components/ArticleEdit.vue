@@ -26,6 +26,7 @@ const open = async (row) => {
     console.log('编辑回显')
     const res = await artGetDetailService(row.id)
     formModel.value = res.data.data
+    console.log('formModel.value', formModel.value)
     imgUrl.value = 'http://big-event-vue-api-t.itheima.net' + formModel.value.cover_img
     // 提交给后台，需要的是 file 格式的，将网络图片，转成 file 格式
     // 网络图片转成 file 对象, 需要转换一下
