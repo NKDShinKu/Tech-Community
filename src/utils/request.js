@@ -5,9 +5,9 @@ import { ElMessage } from 'element-plus'
 
 // const baseURL = 'http://big-event-vue-api-t.itheima.net'
 
-// const baseURL = 'http://localhost:3000/'
+const baseURL = 'http://localhost:3000/'
 
-const baseURL = 'https://api.achamster.live/api';
+// const baseURL = 'https://api.achamster.live/api'
 
 const instance = axios.create({
   baseURL,

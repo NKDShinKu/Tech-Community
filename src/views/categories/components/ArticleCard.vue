@@ -9,7 +9,7 @@ defineProps({
         title: '渐进式框架',
         time: '2024-07-21',
         desc: 'Vue 是一个框架，也是一个生态。其功能覆盖了大部分前端开发常见的需求。但 Web 世界是很 diverse 的，不同的开发者在 Web 上构建的东西可能在形式和规模上会有很大的不同。考虑到这一点，Vue 的设计非常注重灵活性和“可以被逐步集成”这个特点。根据你的需求场景，你可以用不同的方式使用 Vue：',
-        img: 'https://img.achamster.live/uploads/1743942938938-aonokana.jpeg'
+        img: 'https://img.achamster.live/uploads%2Faonokana.jpeg'
       }
     }
   }
@@ -19,7 +19,7 @@ defineProps({
   <div class="card">
     <RouterLink to="/detail/231">
       <div class="image">
-        <img src="https://img.achamster.live/uploads/1743942938938-aonokana.jpeg" alt="" />
+        <img src="https://img.achamster.live/uploads%2Faonokana.jpeg" alt="" />
       </div>
       <div class="content">
         <div class="information">

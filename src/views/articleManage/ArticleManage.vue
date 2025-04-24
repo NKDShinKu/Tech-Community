@@ -5,6 +5,7 @@ import ChannelSelect from './components/ChannelSelect.vue'
 import { artGetListService } from '@/api/article'
 import { formatTime } from '@/utils/format'
 import ArticleEdit from './components/ArticleEdit.vue'
+import { fetchPosts } from '@/api/api'
 
 // 假数据
 // const articleList = ref([
@@ -51,7 +52,8 @@ const loading = ref(false)
 
 const getArticleList = async () => {
   loading.value = true
-  const res = await artGetListService(params.value)
+  const res = await fetchPosts()
+  console.log(res)
   articleList.value = res.data.data
   total.value = res.data.total
   loading.value = false

@@ -2,10 +2,26 @@
 // 这里可以添加 Vue 组件逻辑
 
 import { useUserStore } from '@/stores'
+import { onMounted} from 'vue'
+import apiClient, { checkLoginStatus, refreshToken } from '@/api/api'
 
 const userStore = useUserStore()
 
-console.log(userStore.user)
+onMounted(async () => {
+  const res = await checkLoginStatus()
+  if (res.success) {
+    const { userId } = res.data
+    if (userId === 0) {
+      await refreshToken()
+    } else {
+      const userInfoRes = await apiClient.get(`/user/info/${userId}`)
+      if (userInfoRes.data.code === 0) {
+        userStore.setUser(userInfoRes.data.data)
+      }
+    }
+  }
+})
+
 const categoryList = [
   { id: '', name: '全部' },
   { id: '1', name: '生活相关' },
@@ -53,7 +69,7 @@ const scrollToTop = () => {
     <div class="sidebar-right">
       <div class="profile-content">
         <el-avatar :size="100" :src="userStore.user.user_pic || avatar" />
-        <h3>{{ userStore.user.nickname || '游客模式' }}</h3>
+        <h3>{{ userStore.user.username || '游客模式' }}</h3>
         <p>一个热爱编程的开发者</p>
         <div class="stats">
           <span>文章: 25</span>

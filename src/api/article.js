@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 获取文章分类
-export const artGetChannelsService = () => request.get('/my/cate/list')
+export const artGetChannelsService = () => request.get('api/cate/')
 // 添加文章分类
 export const artAddChannelService = (data) => request.post('/my/cate/add', data)
 // 编辑文章分类

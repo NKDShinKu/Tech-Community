@@ -81,7 +81,7 @@ export const fetchPosts = async () => {
 };
 
 // 获取单篇文章详情
-export const fetchPostById = async (id: string | number) => {
+export const fetchPostById = async (id) => {
   try {
     const response = await apiClient.get(`/posts/${id}`);
     return { success: true, data: response.data };
@@ -96,8 +96,8 @@ export const checkLoginStatus = async () => {
     const response = await apiClient.get('/auth/status');
     return { success: true, data: response.data };
   } catch (error) {
-    return { success: false, error };
+    return { success: false, error }
   }
 };
 
-export default apiClient;
+export default apiClient

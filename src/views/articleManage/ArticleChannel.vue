@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { artGetChannelsService, artDelChannelService } from '@/api/article'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import ChannelEdit from './components/ChannelEdit.vue'
+import apiClient from '@/api/api'
 
 const channelList = ref([])
 const loading = ref(false)
@@ -11,8 +12,9 @@ const dialog = ref()
 // 发请求拿到文章分类的信息
 const getChannelList = async () => {
   loading.value = true
-  const res = await artGetChannelsService()
-  channelList.value = res.data.data
+  const res = await apiClient('/cate')
+  console.log(res.data)
+  channelList.value = res.data.categories
   loading.value = false
   console.log(channelList.value)
 }
@@ -50,8 +52,7 @@ const onSuccess = () => {
     <!-- 文章分类表格 -->
     <el-table v-loading="loading" :data="channelList" style="width: 100%">
       <el-table-column label="序号" width="100" type="index"> </el-table-column>
-      <el-table-column label="分类名称" prop="cate_name"></el-table-column>
-      <el-table-column label="分类别名" prop="cate_alias"></el-table-column>
+      <el-table-column label="分类名称" prop="categoryName"></el-table-column>
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
           <el-button :icon="Edit" circle plain type="primary" @click="onEditChannel(row)"></el-button>
