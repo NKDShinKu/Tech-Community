@@ -1,14 +1,23 @@
 <template>
   <nav class="navbar">
-    <div class="nav-left">技术分享社区</div>
+    <div class="nav-left" @click="$router.push('/')">
+      <img src="/logo.webp" alt="Logo" class="logo" />
+      <span>技术分享社区</span>
+    </div>
     <div class="nav-center">
-      <router-link to="/articles" :class="{ active: $route.path.includes('/articles') }" class="nav-item">首页</router-link>
-      <router-link to="/article-manage" :class="{ active: $route.path.includes('/article-manage') }" class="nav-item">创作者中心</router-link>
+      <router-link to="/articles" :class="{ active: $route.path.includes('/articles') }" class="nav-item">
+        <Icon icon="iconoir:home-alt" style="font-size: 18px" />
+        <span>首页</span>
+      </router-link>
+      <router-link to="/article-manage" :class="{ active: $route.path.includes('/article-manage') }" class="nav-item">
+        <Icon icon="fluent:compose-20-regular" style="font-size: 18px" />
+        <span>创作中心</span>
+      </router-link>
     </div>
     <div class="nav-right">
       <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />
 
-      <router-link v-if="userStore.token" to="/user" class="nav-item">
+      <router-link v-if="userStore.token" to="/user" :class="{ active: $route.path.includes('/user') }" class="nav-item">
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span>
             <el-avatar :src="userStore.user.user_pic || avatar" />
@@ -87,6 +96,27 @@ const router = useRouter()
   top: 0;
   width: 100%;
   z-index: 5;
+  .nav-left {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    //不允许复制
+    user-select: none;
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
 }
 
 .nav-item {
@@ -96,7 +126,11 @@ const router = useRouter()
   position: relative;
   padding: 5px 8px;
   transition: color 0.3s;
-
+  display: flex;
+  align-items: center;
+  vertical-align: baseline;
+  gap: 2px;
+  user-select: none;
   &:hover {
     color: rgb(75, 138, 201);
   }

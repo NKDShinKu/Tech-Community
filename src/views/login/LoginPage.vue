@@ -147,8 +147,6 @@ const login = async () => {
 .login-page {
   height: 100vh;
   //渐变色背景
-  background: linear-gradient(to right, #ffffff, #bfddfa);
-  backdrop-filter: blur(25px);
   .form {
     display: flex;
     flex-direction: column;

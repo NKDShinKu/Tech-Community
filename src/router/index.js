@@ -31,6 +31,10 @@ const router = createRouter({
           redirect: '/article-manage',
           children: [
             {
+              path: '/article-manage/overview',
+              component: () => import('@/views/creator/OverviewPage.vue')
+            },
+            {
               path: '/article-manage',
               component: () => import('@/views/creator/ArticleManage.vue')
             },

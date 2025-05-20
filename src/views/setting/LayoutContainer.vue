@@ -42,10 +42,11 @@ import { EditPen, User } from '@element-plus/icons-vue'
   overflow: hidden;
   padding: 20px;
   width: 1300px;
-  height: 85vh;
+  height: 90vh;
   margin: 5rem auto 0;
   .el-aside {
     .el-menu {
+      margin-top: 20px;
       width: 200px;
       border-right: none;
       .el-menu-item {

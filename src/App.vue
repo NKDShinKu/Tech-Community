@@ -1,10 +1,12 @@
 <script setup>
 import zh from 'element-plus/es/locale/lang/zh-cn.mjs'
+import BackgroundAnimal from '@/components/BackgroundAnimal.vue'
 </script>
 
 <template>
   <!-- 国际化处理 -->
   <el-config-provider :locale="zh">
+    <BackgroundAnimal />
     <router-view />
   </el-config-provider>
 

@@ -50,7 +50,7 @@ const isEmpty = ref(true)
 .profile-page {
   padding: 20px;
   width: 1000px;
-  margin: 5rem auto;
+  margin: 5rem auto 0;
   .user-card {
     margin-bottom: 16px;
 
@@ -89,7 +89,7 @@ const isEmpty = ref(true)
   }
 
   .content {
-    min-height: 400px;
+    height: 70vh;
   }
 
 }
