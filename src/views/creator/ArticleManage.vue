@@ -1,10 +1,10 @@
 <script setup>
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import ChannelSelect from './components/ChannelSelect.vue'
-import { artGetListService, artDelService } from '@/api/article'
-import { formatTime } from '@/utils/format'
-import ArticleEdit from './components/ArticleEdit.vue'
+import ChannelSelect from '@/views/creator/components/ChannelSelect.vue'
+import { artGetListService, artDelService } from '@/api/article.js'
+import { formatTime } from '@/utils/format.js'
+import ArticleEdit from '@/views/creator/components/ArticleEdit.vue'
 
 // 假数据
 // const articleList = ref([

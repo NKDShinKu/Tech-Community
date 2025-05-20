@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import ChannelSelect from './ChannelSelect.vue'
 import { Plus } from '@element-plus/icons-vue'
-import { artPublishService, artGetDetailService, artEditService } from '@/api/article'
+import { artPublishService, artGetDetailService, artEditService } from '@/api/article.js'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import axios from 'axios'
@@ -44,6 +44,7 @@ const imgUrl = ref('')
 const onUploadFile = (uploadFile) => {
   imgUrl.value = URL.createObjectURL(uploadFile.raw)
   formModel.value.cover_img = uploadFile.raw
+  console.log('img:',formModel.value.cover_img)
 }
 defineExpose({
   open

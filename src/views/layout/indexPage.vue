@@ -2,11 +2,12 @@
   <nav class="navbar">
     <div class="nav-left">技术分享社区</div>
     <div class="nav-center">
-      <router-link to="/article" :class="{ active: $route.path.includes('/article') }" class="nav-item">首页</router-link>
-      <router-link to="/about" :class="{ active: $route.path.includes('/about') }" class="nav-item">我的</router-link>
+      <router-link to="/articles" :class="{ active: $route.path.includes('/articles') }" class="nav-item">首页</router-link>
+      <router-link to="/article-manage" :class="{ active: $route.path.includes('/article-manage') }" class="nav-item">创作者中心</router-link>
     </div>
     <div class="nav-right">
       <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />
+
       <router-link v-if="userStore.token" to="/user" class="nav-item">
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span>
@@ -14,13 +15,17 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="" :icon="Notebook">文章管理</el-dropdown-item>
-              <el-dropdown-item command="profile" :icon="User">基本资料</el-dropdown-item>
-              <el-dropdown-item command="logout" :icon="SwitchButton">退出登录</el-dropdown-item>
+              <el-dropdown-item command="setting"><Icon icon="hugeicons:setting-07" style="font-size: 18px" />设定中心</el-dropdown-item>
+              <el-dropdown-item command="article"><el-icon><Document /></el-icon>我的文章</el-dropdown-item>
+              <el-dropdown-item command="favorites"><el-icon><Star /></el-icon>我的收藏</el-dropdown-item>
+              <el-dropdown-item command="support"><Icon icon="prime:thumbs-up" style="font-size: 18px" />我的点赞</el-dropdown-item>
+              <el-dropdown-item command="history"><Icon icon="material-symbols-light:history-2-rounded" style="font-size: 18px" />浏览历史</el-dropdown-item>
+              <el-dropdown-item command="logout"><Icon icon="quill:off" style="font-size: 16px" />退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </router-link>
+
       <router-link v-else to="/login" class="nav-item">登录/注册</router-link>
     </div>
   </nav>
@@ -31,7 +36,7 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
-import { User, Notebook, SwitchButton } from '@element-plus/icons-vue'
+import { Document, Star } from '@element-plus/icons-vue'
 
 const handleCommand = async (command) => {
   if (command === 'logout') {
@@ -122,6 +127,6 @@ const router = useRouter()
 }
 
 .router-view {
-  margin-top: 6rem;
+  margin-top: 5rem;
 }
 </style>

@@ -75,7 +75,7 @@ const onReset = () => {
 }
 </script>
 <template>
-  <page-container title="重置密码">
+  <page-container title="修改密码">
     <el-row>
       <el-col :span="12">
         <el-form

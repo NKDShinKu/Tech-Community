@@ -87,7 +87,6 @@ const login = async () => {
 再次输入密码需要自定义校验规则，和密码框值一致 -->
   <el-row class="login-page">
     <!--  返回主页  -->
-    <el-button @click="router.push('/')">返回主页</el-button>
     <el-col :span="8" class="form">
       <!-- 注册模块 -->
       <el-form :model="formModel" ref="form" size="large" autocomplete="off" v-if="isRegister" :rules="rules">
@@ -105,6 +104,9 @@ const login = async () => {
         </el-form-item>
         <el-form-item>
           <el-button @click="register" class="button" type="primary" auto-insert-space> 注册 </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="router.push('/')" class="button">返回主页</el-button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false"> 登录 → </el-link>
@@ -131,7 +133,9 @@ const login = async () => {
         <el-form-item>
           <el-button @click="login" class="button" type="primary" auto-insert-space>登录</el-button>
         </el-form-item>
-        <el-form-item class="flex">
+        <el-form-item>
+          <el-button @click="router.push('/')" class="button">返回主页</el-button>
+        </el-form-item>        <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true"> 注册 → </el-link>
         </el-form-item>
       </el-form>
@@ -142,7 +146,9 @@ const login = async () => {
 <style lang="scss" scoped>
 .login-page {
   height: 100vh;
-  background-color: #edeaea;
+  //渐变色背景
+  background: linear-gradient(to right, #ffffff, #bfddfa);
+  backdrop-filter: blur(25px);
   .form {
     display: flex;
     flex-direction: column;
@@ -150,8 +156,9 @@ const login = async () => {
     user-select: none;
     margin: auto auto;
     background-color: #fff;
-    padding: 0 100px;
-    height: 400px;
+    padding: 20px 100px;
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.1);
+
     border-radius: 10px;
     .title {
       margin: 0 auto;

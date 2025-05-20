@@ -9,14 +9,14 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/views/layout/indexPage.vue'),
-      redirect: '/article',
+      redirect: '/articles',
       children: [
         {
-          path: '/article',
+          path: '/articles',
           component: () => import('@/views/home/HomePage.vue'),
           children: [
             {
-              path: '/article/:id?',
+              path: '/articles/:id?',
               component: () => import('@/views/categories/indexPage.vue')
             }
           ]
@@ -26,38 +26,60 @@ const router = createRouter({
           component: () => import('@/views/articleDetail/indexPage.vue')
         },
         {
-          path: '/about',
-          component: () => import('@/views/about/indexPage.vue')
+          path: '/article-manage',
+          component: () => import('@/views/creator/LayoutContainer.vue'),
+          redirect: '/article-manage',
+          children: [
+            {
+              path: '/article-manage',
+              component: () => import('@/views/creator/ArticleManage.vue')
+            },
+            {
+              path: '/article-manage/channel',
+              component: () => import('@/views/creator/ArticleChannel.vue')
+            },
+          ]
+        },
+        {
+          path: '/user',
+          component: () => import('@/views/user/LayoutContainer.vue'),
+          redirect: '/user/article',
+          children: [
+            {
+              path: '/user/article',
+              component: () => import('@/views/user/ArticlePage.vue')
+            },
+            {
+              path: '/user/favorites',
+              component: () => import('@/views/user/FavoritesPage.vue')
+            },
+            {
+              path: '/user/history',
+              component: () => import('@/views/user/HistoryPage.vue')
+            },
+            {
+              path: '/user/support',
+              component: () => import('@/views/user/SupportPage.vue')
+            }
+          ]
+        },
+        {
+          path: 'user/setting',
+          component: () => import('@/views/setting/LayoutContainer.vue'),
+          redirect: '/user/setting/profile',
+          children: [
+            {
+              path: '/user/setting/profile',
+              component: () => import('@/views/setting/ProfilePage.vue')
+            },
+            {
+              path: '/user/setting/password',
+              component: () => import('@/views/setting/PasswordPage.vue')
+            }
+          ]
         }
       ]
     },
-    {
-      path: '/user',
-      component: () => import('@/views/creator/LayoutContainer.vue'),
-      redirect: '/article/manage',
-      children: [
-        {
-          path: '/article/manage',
-          component: () => import('@/views/articleManage/ArticleManage.vue')
-        },
-        {
-          path: '/article/channel',
-          component: () => import('@/views/articleManage/ArticleChannel.vue')
-        },
-        {
-          path: '/user/profile',
-          component: () => import('@/views/user/UserProfile.vue')
-        },
-        {
-          path: '/user/avatar',
-          component: () => import('@/views/user/UserAvatar.vue')
-        },
-        {
-          path: '/user/password',
-          component: () => import('@/views/user/UserPassword.vue')
-        }
-      ]
-    }
   ]
 })
 

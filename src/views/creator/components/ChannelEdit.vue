@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { artAddChannelService, artEditChannelService } from '@/api/article'
+import { artAddChannelService, artEditChannelService } from '@/api/article.js'
 
 const dialogVisible = ref(false)
 const open = async (row) => {

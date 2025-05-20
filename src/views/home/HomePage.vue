@@ -34,7 +34,7 @@ const scrollToTop = () => {
             :class="{ active: item.id === $route.params.id }"
             class="category-item"
             v-for="item in categoryList"
-            :to="`/article/${item.id}`"
+            :to="`/articles/${item.id}`"
             :key="item.id"
             @click="scrollToTop"
           >
@@ -63,9 +63,7 @@ const scrollToTop = () => {
     </div>
 
     <!-- 置顶按钮 -->
-    <el-button class="back-to-top" @click="scrollToTop" circle>
-      <Icon icon="emojione:top-arrow" style="font-size: 28px" />
-    </el-button>
+    <el-backtop :right="80" :bottom="80" />
   </div>
 </template>
 

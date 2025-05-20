@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { artGetChannelsService, artDelChannelService } from '@/api/article'
+import { artGetChannelsService, artDelChannelService } from '@/api/article.js'
 import { Edit, Delete } from '@element-plus/icons-vue'
-import ChannelEdit from './components/ChannelEdit.vue'
+import ChannelEdit from '@/views/creator/components/ChannelEdit.vue'
 
 const channelList = ref([])
 const loading = ref(false)

@@ -29,7 +29,8 @@ const categoryName = computed(() => {
   <div class="container">
     <!-- 标题 -->
     <h2 class="title">{{ categoryName }}</h2>
-    <ArticleCard v-for="i in 10" :key="i"></ArticleCard>
+    <div class="loading" v-if="loading">加载中...</div>
+    <ArticleCard v-for="i in 10"   :key="i"></ArticleCard>
   </div>
 </template>
 <style scoped>
@@ -38,6 +39,12 @@ const categoryName = computed(() => {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 15px;
+
+  .loading{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 30%;
+  }
 
   .title {
     display: flex;
