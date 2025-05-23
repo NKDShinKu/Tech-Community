@@ -18,19 +18,19 @@ onMounted(() => {
       <el-aside width="200px">
 
         <el-menu :default-active="$route.path" text-color="#000000" router>
-          <el-menu-item index="/article-manage/overview">
+          <el-menu-item index="/creator/overview">
             <el-icon>
               <HomeFilled />
             </el-icon>
             总览
           </el-menu-item>
-          <el-menu-item index="/article-manage/channel">
+          <el-menu-item index="/creator/channel">
             <el-icon>
               <Management />
             </el-icon>
             <span>文章分类</span>
           </el-menu-item>
-          <el-menu-item index="/article-manage">
+          <el-menu-item index="/creator/manage">
             <el-icon>
               <Promotion />
             </el-icon>

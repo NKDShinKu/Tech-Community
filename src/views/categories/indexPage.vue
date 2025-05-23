@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import ArticleCard from './components/ArticleCard.vue'
+import ArticleCard from '../../components/ArticleCard.vue'
 
 const route = useRoute()
 

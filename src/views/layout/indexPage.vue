@@ -9,7 +9,7 @@
         <Icon icon="iconoir:home-alt" style="font-size: 18px" />
         <span>首页</span>
       </router-link>
-      <router-link to="/article-manage" :class="{ active: $route.path.includes('/article-manage') }" class="nav-item">
+      <router-link to="/creator" :class="{ active: $route.path.includes('/article-manage') }" class="nav-item">
         <Icon icon="fluent:compose-20-regular" style="font-size: 18px" />
         <span>创作中心</span>
       </router-link>

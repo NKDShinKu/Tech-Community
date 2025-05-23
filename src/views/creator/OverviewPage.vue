@@ -1,16 +1,18 @@
 <script setup>
 import { ref } from 'vue'
+import { Warning } from '@element-plus/icons-vue'
 
 const userInfo = ref({
   avatar: '@/assets/default.png',
   nickname: '二階堂真紅',
-  description: '一个热爱编程的开发者',
+  description: '一个热爱编程的开发者'
 })
 
 const stats = ref({
   comments: 120,
   likes: 350,
   favorites: 80,
+  views: 5000
 })
 </script>
 
@@ -28,41 +30,118 @@ const stats = ref({
     </el-card>
 
     <!-- 统计数据展示 -->
-    <el-row :gutter="20" class="stats-row">
-      <el-col :span="8">
-        <el-card>
-          <el-statistic
-            title="文章评论数"
-            :value="stats.comments"
-            prefix-icon="el-icon-chat-line-round"
-          />
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <el-statistic
-            title="文章点赞数"
-            :value="stats.likes"
-            prefix-icon="el-icon-thumb"
-          />
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <el-statistic
-            title="文章收藏数"
-            :value="stats.favorites"
-            prefix-icon="el-icon-star-off"
-          />
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-card class="data-card">
+      <div class="title-card">数据概览</div>
+      <el-row :gutter="20" class="stats-row">
+        <el-col :span="12">
+          <el-card shadow="never">
+            <el-statistic title="文章浏览量" :value="stats.views" >
+              <template #title>
+                <div style="display: inline-flex; align-items: center">
+                  文章浏览量
+                  <el-tooltip
+                    effect="dark"
+                    content="文章被所有用户浏览的总数量，不包括列表浏览"
+                    placement="top"
+                  >
+                    <el-icon style="margin-left: 4px" :size="12">
+                      <Warning />
+                    </el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+              <template #prefix>
+                <Icon icon="fluent-mdl2:view" style="font-size: 16px; margin-right: 5px" />
+              </template>
+            </el-statistic>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="never">
+            <el-statistic
+              :value="stats.favorites"
+            >
+              <template #title>
+                <div style="display: inline-flex; align-items: center">
+                  文章收藏数
+                  <el-tooltip
+                    effect="dark"
+                    content="文章被已登录用户收藏的总数量，包括自己"
+                    placement="top"
+                  >
+                    <el-icon style="margin-left: 4px" :size="12">
+                      <Warning />
+                    </el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+              <template #prefix>
+                <Icon icon="uit:favorite" style="font-size: 16px; margin-right: 5px" />
+              </template>
+            </el-statistic>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="stats-row">
+        <el-col :span="12">
+          <el-card shadow="never">
+            <el-statistic
+              title="文章评论数"
+              :value="stats.comments"
+            >
+              <template #title>
+                <div style="display: inline-flex; align-items: center">
+                  文章评论数
+                  <el-tooltip
+                    effect="dark"
+                    content="文章被已登录用户评论的总数量，包括自己"
+                    placement="top"
+                  >
+                    <el-icon style="margin-left: 4px" :size="12">
+                      <Warning />
+                    </el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+              <template #prefix>
+                <Icon icon="mdi-light:comment-text" style="font-size: 16px; margin-right: 5px" />
+              </template>
+            </el-statistic>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="never">
+            <el-statistic title="文章点赞数" :value="stats.likes" >
+              <template #title>
+                <div style="display: inline-flex; align-items: center">
+                  文章点赞数
+                  <el-tooltip
+                    effect="dark"
+                    content="文章被已登录用户点赞的总数量，包括自己"
+                    placement="top"
+                  >
+                    <el-icon style="margin-left: 4px" :size="12">
+                      <Warning />
+                    </el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+              <template #prefix>
+                <Icon icon="prime:thumbs-up" style="font-size: 16px; margin-right: 5px" />
+              </template>
+            </el-statistic>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
 <style scoped lang="scss">
 .overview-page {
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   .user-info-card {
     margin-bottom: 20px;
 
@@ -85,12 +164,34 @@ const stats = ref({
     }
   }
 
-  .stats-row {
-    display: flex;
-    justify-content: space-between;
-
-    .el-card {
+  .data-card {
+    background-color: rgba(255, 255, 255, 1);
+    padding: 5px 20px 10px;
+    flex: 1;
+    .title-card {
       text-align: center;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      padding: 10px;
+      border-bottom: #a6a2a2 1px solid;
+      border-radius: 8px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      .el-card {
+        text-align: center;
+        height: 150px;
+        background-color: #f7f8fa;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
     }
   }
 }

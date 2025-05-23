@@ -26,20 +26,20 @@ const router = createRouter({
           component: () => import('@/views/articleDetail/indexPage.vue')
         },
         {
-          path: '/article-manage',
+          path: '/creator',
           component: () => import('@/views/creator/LayoutContainer.vue'),
-          redirect: '/article-manage',
+          redirect: '/creator/overview',
           children: [
             {
-              path: '/article-manage/overview',
+              path: '/creator/overview',
               component: () => import('@/views/creator/OverviewPage.vue')
             },
             {
-              path: '/article-manage',
+              path: '/creator/manage',
               component: () => import('@/views/creator/ArticleManage.vue')
             },
             {
-              path: '/article-manage/channel',
+              path: '/creator/channel',
               component: () => import('@/views/creator/ArticleChannel.vue')
             },
           ]

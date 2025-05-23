@@ -25,11 +25,9 @@
           <el-menu-item index="/user/history"><Icon icon="material-symbols-light:history-2-rounded" style="font-size: 20px" />浏览历史</el-menu-item>
         </el-menu>
       </el-header>
-      <el-main>
-        <div class="content">
-          <router-view v-if="isEmpty"></router-view>
-          <el-empty v-else description="没有数据" />
-        </div>
+      <el-main class="main">
+        <router-view v-if="isEmpty"></router-view>
+        <el-empty v-else description="没有数据" />
       </el-main>
     </el-card>
 
@@ -50,17 +48,17 @@ const isEmpty = ref(true)
 .profile-page {
   padding: 20px;
   width: 1000px;
-  margin: 5rem auto 0;
+  margin: 4rem auto 0;
   .user-card {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 
     .user-info {
       display: flex;
       align-items: center;
 
       .avatar {
-        width: 72px;
-        height: 72px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         margin-right: 16px;
       }
@@ -89,7 +87,11 @@ const isEmpty = ref(true)
   }
 
   .content {
-    height: 70vh;
+    height: 73vh;
+    .main {
+      padding: 0 30px 0;
+      height: 62vh;
+    }
   }
 
 }

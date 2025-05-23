@@ -57,7 +57,7 @@ const scrollToTop = () => {
         <p>一个热爱编程的开发者</p>
         <div class="stats">
           <span>文章: 25</span>
-          <span>关注: 150</span>
+          <span>收藏: 150</span>
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@ const scrollToTop = () => {
   margin-top: 6rem; // mt-24
   display: flex;
   justify-content: center;
-  gap: 3.25rem; // space-x-13
+  gap: 3rem; // space-x-13
   min-height: 100vh;
   padding-bottom: 2.5rem; // pb-10
   max-width: 1200px;
@@ -120,7 +120,7 @@ const scrollToTop = () => {
 
 // 中间内容区域
 .content-area {
-  width: 850px;
+  width: 900px;
   overflow-y: auto;
   background-color: #ffffff;
   border-radius: 5px;
