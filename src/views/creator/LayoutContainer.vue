@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores'
 import { onMounted } from 'vue'
 const userStore = useUserStore()
 onMounted(() => {
-  userStore.getUser()
+  userStore.getUser(userStore.userId)
 })
 
 </script>

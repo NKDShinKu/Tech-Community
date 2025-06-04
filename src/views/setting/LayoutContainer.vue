@@ -1,6 +1,13 @@
 <script setup>
 
 import { EditPen, User } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/index.js'
+import { onMounted } from 'vue'
+
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.getUser(userStore.userId)
+})
 </script>
 
 <template>

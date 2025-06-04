@@ -1,10 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { Warning } from '@element-plus/icons-vue'
+import { useUserStore} from '@/stores/index.js'
+
+const userStore = useUserStore()
 
 const userInfo = ref({
-  avatar: '@/assets/default.png',
-  nickname: '二階堂真紅',
+  avatar: userStore.userInfo.avatar,
+  nickname: userStore.userInfo.username,
   description: '一个热爱编程的开发者'
 })
 
@@ -21,7 +24,7 @@ const stats = ref({
     <!-- 个人信息展示 -->
     <el-card class="user-info-card">
       <div class="user-info">
-        <el-avatar :size="80" :src="userInfo.avatar" />
+        <el-avatar :size="80" :src="userInfo.avatar || '/public/default.png'" />
         <div class="info">
           <h3>{{ userInfo.nickname }}</h3>
           <p>{{ userInfo.description }}</p>

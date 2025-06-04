@@ -1,21 +1,25 @@
 <script setup>
 import { useUserStore } from '@/stores'
 import { ref } from 'vue'
-import { userUpdateInfoService, userUploadAvatarService } from '@/api/user'
+import { userUpdateInfoService, userUploadFileService } from '@/api/user'
 import { Plus, Upload } from '@element-plus/icons-vue'
 const {
-  user: { username, nickname, email, id },
+  userInfo,
   getUser
 } = useUserStore()
 
-const userInfo = ref({ username, nickname, email, id })
-
+const loading = ref(false)
+const user = ref({
+  username: userInfo.username,
+  email: userInfo.email,
+  avatar: userInfo.avatar
+})
 const rules = {
-  nickname: [
-    { required: true, message: '请输入用户昵称', trigger: 'blur' },
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
     {
       pattern: /^\S{2,10}$/,
-      message: '昵称必须是2-10位的非空字符串',
+      message: '用户名必须是3-10位的非空字符串',
       trigger: 'blur'
     }
   ],
@@ -27,11 +31,18 @@ const rules = {
 
 const formRef = ref()
 const onSubmit = async () => {
-  const valid = await formRef.value.validate()
-  if (valid) {
-    await userUpdateInfoService(userInfo.value)
-    await getUser()
-    ElMessage.success('修改成功')
+  loading.value = true
+  try {
+    const valid = await formRef.value.validate()
+    if (valid) {
+      await userUpdateInfoService(user.value)
+      await getUser(userStore.userId)
+      ElMessage.success('修改成功')
+    }
+  } catch (error) {
+    ElMessage.error('修改失败，请检查输入')
+  } finally {
+    loading.value = false
   }
 }
 
@@ -39,9 +50,11 @@ const onSubmit = async () => {
 const userStore = useUserStore()
 
 const uploadRef = ref()
-const imgUrl = ref(userStore.user.user_pic)
+const imgUrl = ref(userStore.userInfo.avatar || '')
+const nowFile = ref(null)
 const onUploadFile = (file) => {
   const reader = new FileReader()
+  nowFile.value = file
   reader.readAsDataURL(file.raw)
   reader.onload = () => {
     imgUrl.value = reader.result
@@ -49,31 +62,40 @@ const onUploadFile = (file) => {
 }
 // 上传头像
 const onUpdateAvatar = async () => {
-  await userUploadAvatarService(imgUrl.value)
-  await userStore.getUser()
-  ElMessage({ type: 'success', message: '更换头像成功' })
+  loading.value = true
+  try {
+    const res = await userUploadFileService(nowFile.value)
+    user.value = {
+      ...user.value,
+      avatar: res.data.cdnUrl
+    }
+    await userUpdateInfoService(user.value)
+    await userStore.getUser(userStore.userId)
+    ElMessage({ type: 'success', message: '更换头像成功' })
+  } catch (error) {
+    ElMessage({ type: 'error', message: '更换头像失败' })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
 <template>
-  <page-container title="个人信息">
+  <page-container v-loading="loading" title="个人信息">
     <el-row>
       <el-col :span="12">
         <el-form
-          :model="userInfo"
+          :model="user"
           :rules="rules"
           ref="formRef"
           label-width="100px"
           size="large"
         >
-          <el-form-item label="登录名称">
-            <el-input v-model="userInfo.username" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="用户昵称" prop="nickname">
-            <el-input v-model="userInfo.nickname"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="user.username"></el-input>
           </el-form-item>
           <el-form-item label="用户邮箱" prop="email">
-            <el-input v-model="userInfo.email"></el-input>
+            <el-input v-model="user.email"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="onSubmit" type="primary">提交修改</el-button>

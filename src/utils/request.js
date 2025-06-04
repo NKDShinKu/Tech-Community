@@ -1,47 +1,126 @@
-import { useUserStore } from '@/stores'
-import axios from 'axios'
-import router from '@/router'
-import { ElMessage } from 'element-plus'
+import axios from 'axios';
 
-const baseURL = 'http://big-event-vue-api-t.itheima.net'
 
-const instance = axios.create({
-  baseURL,
-  timeout: 100000
-})
+// 使用环境变量获取API基础URL
+const BASE_URL = 'http://localhost:3000/api';
 
-instance.interceptors.request.use(
-  (config) => {
-    const userStore = useUserStore()
-    if (userStore.token) {
-      config.headers.Authorization = userStore.token
-    }
-    return config
+// 创建 axios 实例
+const request = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
   },
-  (err) => Promise.reject(err)
-)
+  // 添加跨域支持
+  withCredentials: true,
+});
 
-instance.interceptors.response.use(
-  (res) => {
-    if (res.data.code === 0) {
-      return res
+let isRefreshing = false;
+let requests = [];
+
+// 请求拦截器
+request.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    ElMessage({ message: res.data.message || '服务异常', type: 'error' })
-    return Promise.reject(res.data)
+    return config;
   },
-  (err) => {
-    ElMessage({
-      message: err.response.data.message || '服务异常',
-      type: 'error'
-    })
-    console.log(err)
-    if (err.response?.status === 401) {
-      useUserStore().removeToken()
-      router.push('/login')
-    }
-    return Promise.reject(err)
+  error => {
+    return Promise.reject(error);
   }
-)
+);
 
-export default instance
-export { baseURL }
+// 响应拦截器
+request.interceptors.response.use(
+  response => {
+    // 成功状态码处理：200和201都是成功的响应
+    // 201 Created 表示成功创建资源，在登录和注册时后端可能返回此状态码
+    if (response.status === 200 || response.status === 201) {
+      return response.data;
+    }
+    return response.data;
+  },
+  async error => {
+    const originalRequest = error.config || {};
+    const errorCode = error.response?.data?.errorCode;
+
+    if(error.response?.status === 401 && (error.response?.data.message === '用户名或密码错误') ) {
+      return Promise.reject(new Error('用户名或密码错误'));
+    }
+
+    // 处理 401/403 且不是刷新 token 的请求
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes('/auth/refresh') &&
+      errorCode !== 'USER_ALREADY_REGISTERED'
+    ) {
+      console.log(error)
+      if (isRefreshing) {
+        // 如果正在刷新，返回一个未 resolve 的 promise
+        return new Promise((resolve) => {
+          requests.push(() => {
+            resolve(request(originalRequest));
+          });
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) {
+          throw new Error('No refresh token');
+        }
+
+        // 发送刷新 token 请求
+        const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
+          refreshToken,
+        });
+
+        // 存储新的 token
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('userInfo', JSON.stringify(data.user));
+
+        // 重试原始请求
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${data.token}`;
+        }
+
+        // 执行挂起的请求
+        requests.forEach(cb => cb());
+        requests = [];
+
+        return request(originalRequest);
+      } catch (refreshError) {
+        // 刷新 token 失败，清除存储并跳转登录
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userInfo');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }        // 特殊处理 201 状态码（一般表示资源创建成功，例如登录成功）
+    if (error.response?.status === 201) {
+      return error.response.data;
+    }
+
+    // 处理可能的 CORS 错误
+    if (!error.response && error.message === 'Network Error') {
+      console.error('可能存在跨域问题:', error);
+      return Promise.reject(new Error('网络请求失败，可能是跨域限制导致'));
+    }
+
+    // 其他错误处理
+    return Promise.reject(error);
+  }
+);
+
+export default request;

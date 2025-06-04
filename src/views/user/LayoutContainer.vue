@@ -3,9 +3,9 @@
     <!-- 用户卡片 -->
     <el-card class="user-card">
       <div class="user-info">
-        <img class="avatar" src="@/assets/default.png" />
+        <img class="avatar" :src="userStore.userInfo.avatar||'/public/default.png'" />
         <div class="info">
-          <div class="name">二階堂真紅</div>
+          <div class="name">{{ userStore.userInfo.username }}</div>
           <div class="meta">
             <p>+ 你从事什么职业?</p>
           </div>
@@ -39,8 +39,10 @@
 <script setup>
 import { ref } from 'vue'
 import { Document, Star } from '@element-plus/icons-vue'
+import {useUserStore} from '@/stores/index.js'
 
-
+const userStore = useUserStore()
+userStore.getUser(userStore.userId)
 const isEmpty = ref(true)
 </script>
 

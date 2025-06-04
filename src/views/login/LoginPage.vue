@@ -1,5 +1,5 @@
 <script setup>
-import { User, Lock } from '@element-plus/icons-vue'
+import { User, Lock, Folder } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
 import { userRegisterService, userLoginService } from '@/api/user'
 import { useUserStore } from '@/stores'
@@ -9,6 +9,7 @@ const isRegister = ref(false)
 // 表单对象
 const formModel = ref({
   username: '',
+  email: '',
   password: '',
   repassword: ''
 })
@@ -16,7 +17,15 @@ const formModel = ref({
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 5, max: 10, message: '用户名必须是5-10位的字符', trigger: 'blur' }
+    { min: 3, max: 10, message: '用户名必须是3-10位的字符', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    {
+      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      message: '请输入正确的邮箱格式',
+      trigger: 'blur'
+    }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -60,6 +69,7 @@ const register = async () => {
 watch(isRegister, () => {
   formModel.value = {
     username: '',
+    email: '',
     password: '',
     repassword: ''
   }
@@ -70,8 +80,9 @@ const router = useRouter()
 const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
-  userStore.setToken(res.data.token)
-  userStore.getUser()
+  console.log(res.data.data)
+  userStore.setToken(res.data.data.token, res.data.data.refreshToken, res.data.data.userInfo.id)
+  userStore.getUser(res.data.data.userInfo.id)
   ElMessage.success('登录成功')
   router.push('/')
 }
@@ -95,6 +106,10 @@ const login = async () => {
         </el-form-item>
         <el-form-item prop="username">
           <el-input v-model="formModel.username" :prefix-icon="User" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+<!--        邮箱-->
+        <el-form-item prop="email">
+          <el-input v-model="formModel.email" :prefix-icon="Folder" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input v-model="formModel.password" :prefix-icon="Lock" type="password" placeholder="请输入密码"></el-input>
