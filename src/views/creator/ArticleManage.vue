@@ -2,27 +2,9 @@
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import ChannelSelect from '@/views/creator/components/ChannelSelect.vue'
-import { artGetListService, artDelService } from '@/api/article.js'
+import { GetArticlesService,  DelArticleService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
 import ArticleEdit from '@/views/creator/components/ArticleEdit.vue'
-
-// 假数据
-// const articleList = ref([
-//   {
-//     id: 5961,
-//     title: '新的文章啊',
-//     pub_date: '2022-07-10 14:53:52.604',
-//     state: '已发布',
-//     cate_name: '体育'
-//   },
-//   {
-//     id: 5962,
-//     title: '新的文章啊',
-//     pub_date: '2022-07-10 14:54:30.904',
-//     state: null,
-//     cate_name: '体育'
-//   }
-// ])
 
 // 编辑、删除方法
 const articleEditRef = ref()
@@ -32,7 +14,7 @@ const onDeleteArticle = async (row) => {
     confirmButtonText: '确认',
     cancelButtonText: '取消'
   })
-  await artDelService(row.id)
+  await DelArticleService(row.id)
   ElMessage({ type: 'success', message: '删除成功' })
   getArticleList()
 }
@@ -44,11 +26,12 @@ const onEditArticle = (row) => {
 }
 
 const params = ref({
-  pagenum: 1,
-  pagesize: 5,
+  page: 1,
+  limit: 5,
   cate_id: '',
   state: ''
 })
+
 
 // 获取数据
 const articleList = ref([])
@@ -58,8 +41,8 @@ const loading = ref(false)
 
 const getArticleList = async () => {
   loading.value = true
-  const res = await artGetListService(params.value)
-  articleList.value = res.data.data
+  const res = await GetArticlesService()
+  articleList.value = res.data
   total.value = res.data.total
   loading.value = false
 }
@@ -113,7 +96,8 @@ const onSuccess = (type) => {
       <el-form-item label="发布状态：">
         <el-select v-model="params.state" style="width: 10vw" placeholder="请选择">
           <el-option label="已发布" value="已发布"></el-option>
-          <el-option label="草稿" value="草稿"></el-option>
+          <el-option label="待审核" value="待审核"></el-option>
+          <el-option label="未通过" value="未通过"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>

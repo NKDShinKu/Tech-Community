@@ -1,24 +1,31 @@
 import request from '@/utils/request'
 
 // 获取文章分类
-export const artGetChannelsService = () => request.get('/my/cate/list')
+export const artGetChannelsService = () => request.get('/cate')
 // 添加文章分类
-export const artAddChannelService = (data) => request.post('/my/cate/add', data)
+export const artAddChannelService = (data) => request.post('/cate', data)
 // 编辑文章分类
-export const artEditChannelService = (data) => request.put('/my/cate/info', data)
+export const artEditChannelService = ({categoryId, categoryName}) => request.put(`/cate/${categoryId}`, { categoryName })
 // 删除文章分类
 export const artDelChannelService = (id) =>
-  request.delete('/my/cate/del', {
-    params: { id }
-  })
+  request.delete(`/cate/${id}`)
+
+// 新增文章
+export const AddArticleService = (data) =>
+  request.post('/posts', data)
+
+// 获取个人文章列表
+export const GetArticlesService = () =>
+  request.get('/posts/my')
+
+// 删除文章
+export const DelArticleService = (id) =>
+  request.delete(`/posts/${id}`)
 
 // 获取文章列表
-export const artGetListService = (params) => request.get('/my/article/list', { params })
-// 发布文章
-export const artPublishService = (data) => request.post('/my/article/add', data)
-// 获取文章
-export const artGetDetailService = (id) => request.get('my/article/info', { params: { id } })
-// 编辑文章
-export const artEditService = (data) => request.put('my/article/info', data)
-// 删除文章
-export const artDelService = (id) => request.delete('my/article/info', { params: { id } })
+export const GetArticleListService = (page, limit) =>
+  request.get('/api/posts/list/approved', { params:{page, limit} } )
+
+// 查看文章详情
+export const GetArticleDetailService = (id) =>
+  request.get(`/posts/${id}`)

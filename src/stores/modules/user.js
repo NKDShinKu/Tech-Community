@@ -6,7 +6,7 @@ export const useUserStore = defineStore('tech-user', () => {
   const token = ref(localStorage.getItem('token') || '')
   const refreshToken = ref(localStorage.getItem('refreshToken') || '')
   const userId = ref(localStorage.getItem('userId') || '')
-  const userInfo = ref(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {})
+  const userInfo = ref(!localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {})
   const setToken = (newToken, newRefreshToken, newUserId) => {
     token.value = newToken
     refreshToken.value = newRefreshToken

@@ -14,23 +14,14 @@ defineExpose({
 
 // 输入规则配置
 const formModel = ref({
-  cate_name: '',
-  cate_alias: ''
+  categoryName: ''
 })
 const rules = {
-  cate_name: [
+  categoryName: [
     { required: true, message: '请输入分类名称', trigger: 'blur' },
     {
       pattern: /^\S{1,10}$/,
       message: '分类名必须是1-10位的非空字符',
-      trigger: 'blur'
-    }
-  ],
-  cate_alias: [
-    { required: true, message: '请输入分类别名', trigger: 'blur' },
-    {
-      pattern: /^[a-zA-Z0-9]{1,15}$/,
-      message: '分类别名必须是1-15位的字母数字',
       trigger: 'blur'
     }
   ]
@@ -40,10 +31,10 @@ const formRef = ref()
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
   await formRef.value.validate()
-  formModel.value.id ? await artEditChannelService(formModel.value) : await artAddChannelService(formModel.value)
+  formModel.value.categoryId ? await artEditChannelService(formModel.value) : await artAddChannelService(formModel.value)
   ElMessage({
     type: 'success',
-    message: formModel.value.id ? '编辑成功' : '添加成功'
+    message: formModel.value.categoryId ? '编辑成功' : '添加成功'
   })
   emit('success')
   dialogVisible.value = false
@@ -51,13 +42,10 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <el-dialog v-model="dialogVisible" :title="formModel.id ? '编辑分类' : '添加分类'" width="30%">
+  <el-dialog v-model="dialogVisible" :title="formModel.categoryId ? '编辑分类' : '添加分类'" width="30%">
     <el-form :model="formModel" :rules="rules" label-width="100px" style="padding-right: 30px" ref="formRef">
-      <el-form-item label="分类名称" prop="cate_name">
-        <el-input v-model="formModel.cate_name" minlength="1" maxlength="10" placeholder="请输入分类名称"></el-input>
-      </el-form-item>
-      <el-form-item label="分类别名" prop="cate_alias">
-        <el-input v-model="formModel.cate_alias" minlength="1" maxlength="15" placeholder="请输入分类别名"></el-input>
+      <el-form-item label="分类名称" prop="categoryName">
+        <el-input v-model="formModel.categoryName" minlength="1" maxlength="10" placeholder="请输入分类名称"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>

@@ -12,7 +12,7 @@ const dialog = ref()
 const getChannelList = async () => {
   loading.value = true
   const res = await artGetChannelsService()
-  channelList.value = res.data.data
+  channelList.value = res.data.categories
   loading.value = false
   console.log(channelList.value)
 }
@@ -25,7 +25,7 @@ const onDelChannel = async (row) => {
     confirmButtonText: '确认',
     cancelButtonText: '取消'
   })
-  await artDelChannelService(row.id)
+  await artDelChannelService(row.categoryId)
   ElMessage({ type: 'success', message: '删除成功' })
   getChannelList()
 }
@@ -50,8 +50,7 @@ const onSuccess = () => {
     <!-- 文章分类表格 -->
     <el-table v-loading="loading" :data="channelList" style="width: 100%">
       <el-table-column label="序号" width="100" type="index"> </el-table-column>
-      <el-table-column label="分类名称" prop="cate_name"></el-table-column>
-      <el-table-column label="分类别名" prop="cate_alias"></el-table-column>
+      <el-table-column label="分类名称" prop="categoryName"></el-table-column>
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
           <el-button :icon="Edit" circle plain type="primary" @click="onEditChannel(row)"></el-button>

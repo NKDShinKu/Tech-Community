@@ -16,14 +16,14 @@ const emit = defineEmits(['update:modelValue'])
 const channelList = ref([])
 const getChannelList = async () => {
   const res = await artGetChannelsService()
-  channelList.value = res.data.data
+  channelList.value = res.data.categories
 }
 getChannelList()
 </script>
 <template>
   <el-select :style="{ width }" placeholder="请选择" :modelValue="modelValue"
     @update:modelValue="emit('update:modelValue', $event)">
-    <el-option v-for="channel in channelList" :key="channel.id" :label="channel.cate_name"
-      :value="channel.id"></el-option>
+    <el-option v-for="channel in channelList" :key="channel.id" :label="channel.categoryName"
+      :value="channel.categoryId"></el-option>
   </el-select>
 </template>
