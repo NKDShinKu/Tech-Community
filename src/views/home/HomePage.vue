@@ -9,6 +9,7 @@ const categoryList = ref([
   { categoryId: '', categoryName: '全部' },
 ])
 
+
 const getCategoryList = async () => {
   const res = await artGetChannelsService()
   categoryList.value = res.data.categories

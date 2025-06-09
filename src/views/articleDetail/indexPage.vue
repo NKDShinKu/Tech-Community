@@ -1,10 +1,17 @@
 <script setup>
 import { ref } from 'vue'
 import commentsCard from './components/CommentsCard.vue'
+import { GetArticleDetailService } from '@/api/article.js'
+import { useRoute } from 'vue-router'
 
 const commentsCardRef = ref(null)
 const liked = ref(false)
 const favorited = ref(false)
+const postDetail = ref({
+  author: {},
+})
+const route = useRoute()
+const articleId = route.params.id
 const toggleLike = () => {
   liked.value = !liked.value
 }
@@ -16,9 +23,19 @@ const OpenComments = () => {
   commentsCardRef.value.open()
 }
 
+// 获取文章详情
+const getPostDetail = async (id) => {
+  try {
+    const res = await GetArticleDetailService(id)
+    // 绑定数据到postDetail
+    postDetail.value = res.data || {}
+    favorited.value = !!res.data?.isFavorited
+  } catch (error) {
+    console.error('获取文章详情失败:', error)
+  }
+}
 
-
-
+getPostDetail(articleId)
 
 // 置顶功能
 const scrollToTop = () => {
@@ -28,7 +45,7 @@ const scrollToTop = () => {
 <template>
 
   <div class="main-container">
-    <commentsCard ref="commentsCardRef"  />
+    <commentsCard ref="commentsCardRef" :post-id="articleId" />
     <!-- 左侧栏：点赞、评论、收藏按钮 -->
     <div class="left-column">
       <!-- 点赞 -->
@@ -44,18 +61,28 @@ const scrollToTop = () => {
 
     <!-- 中间栏：文章内容 -->
     <div class="middle-column">
-      <h1>文章标题</h1>
-      <p>这里是文章的主要内容区域，可以容纳任意长度的文本。左右两栏会随着滚动保持粘性定位。</p>
-      <!-- 测试滚动效果的占位内容 -->
-      <p v-for="i in 30" :key="i">占位段落 {{ i }}，模拟长文章内容。</p>
+      <!-- 封面图 -->
+      <img v-if="postDetail.coverImage" :src="postDetail.coverImage" alt="cover" style="width:100%;border-radius:8px;margin-bottom:16px;" />
+      <h1>{{ postDetail.title }}</h1>
+      <div style="color:#888;font-size:14px;margin-bottom:12px;">
+        <span>发布于 {{ new Date(postDetail.date).toLocaleString() }}</span>
+        <span style="margin-left:16px;">浏览 {{ postDetail.viewCount }}</span>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <el-tag v-if="postDetail.quick_tag" type="info">标签: {{ postDetail.quick_tag }}</el-tag>
+      </div>
+      <div v-html="postDetail.content"></div>
     </div>
 
     <!-- 右侧栏：作者信息 -->
     <div class="right-column">
       <el-card style="min-height: 300px">
         <h2>作者</h2>
-        <p>作者姓名</p>
-        <p>作者简介或相关信息。</p>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+          <el-avatar :src="postDetail.author.avatar" size="large" />
+          <span>{{ postDetail.author.username }}</span>
+        </div>
+        <!-- 可扩展作者简介等 -->
       </el-card>
     </div>
 
@@ -131,6 +158,7 @@ const scrollToTop = () => {
   }
 
   .right-column {
+    border-radius: 10px;
     width: 270px; /* 右侧栏宽度，可调整 */
     position: sticky; /* 粘性定位 */
     top: 70px; /* 距离顶部 20px */
