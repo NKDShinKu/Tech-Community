@@ -25,8 +25,9 @@ const open = async (row) => {
     console.log('编辑回显')
     const res = await GetArticleDetailService(row.id)
     formModel.value = res.data
-    console.log('formModel.value', formModel.value)
-    imgUrl.value =  formModel.value.coverImg
+    formModel.value.category = res.data.category.categoryId
+
+    imgUrl.value = formModel.value.coverImg
     // 提交给后台，需要的是 file 格式的，将网络图片，转成 file 格式
     // 网络图片转成 file 对象, 需要转换一下
     formModel.value.coverImg = await imageUrlToFile(imgUrl.value, formModel.value.coverImg)
@@ -55,7 +56,7 @@ const onPublish = async () => {
 
   if (formModel.value.id) {
     console.log('编辑操作')
-    await AddArticleService()
+    await AddArticleService(formModel.value)
     ElMessage.success('编辑成功')
     visibleDrawer.value = false
     emit('success', 'edit')
@@ -96,7 +97,7 @@ async function imageUrlToFile(url, fileName) {
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
-      <el-form-item label="文章分类" prop="cate_id">
+      <el-form-item label="文章分类">
         <channel-select v-model="formModel.category" width="10vw"></channel-select>
       </el-form-item>
       <el-form-item label="文章封面" prop="cover_img">
@@ -111,7 +112,7 @@ async function imageUrlToFile(url, fileName) {
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button @click="onPublish()" type="primary">发布</el-button>
+        <el-button @click="onPublish" type="primary">发布</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

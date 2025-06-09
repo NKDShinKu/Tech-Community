@@ -6,8 +6,8 @@ import { useUserStore} from '@/stores/index.js'
 const userStore = useUserStore()
 
 const userInfo = ref({
-  avatar: userStore.userInfo.avatar,
-  nickname: userStore.userInfo.username,
+  avatar: userStore.userInfo?.avatar,
+  nickname: userStore.userInfo?.username,
   description: '一个热爱编程的开发者'
 })
 
