@@ -1,102 +1,136 @@
 <script setup>
 
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import CommentInput from './CommentInput.vue';
+import CommentList from './CommentList.vue';
+import { getCommentsService, createCommentService } from '@/api/comments.js';
+import { useUserStore } from '@/stores/index.js'
 
-const visibleDrawer = ref(false)
-
-// 菜单打开与判断
-const open = async () => {
-  visibleDrawer.value = true
-}
-defineExpose({
-  open
-})
-
-
-
-// 模拟评论数据
-const comments = ref([
-  {
-    id: 1,
-    content: '这是一个很棒的文章！',
-    likes: 10,
-    replies: 2,
-    timestamp: new Date('2023-01-01').getTime(),
-  },
-  {
-    id: 2,
-    content: '感谢分享，1学到了很多。',
-    likes: 5,
-    replies: 0,
-    timestamp: new Date('2023-01-02').getTime(),
-  },
-  {
-    id: 3,
-    content: '期待更多类似的内容。',
-    likes: 15,
-    replies: 3,
-    timestamp: new Date('2023-01-03').getTime(),
-  },
-]);
-
-// 当前排序方式
-const sortType = ref('latest'); // 'latest' 或 'hot'
-
-// 根据排序方式计算排序后的评论列表
-const sortedComments = computed(() => {
-  if (sortType.value === 'hot') {
-    return [...comments.value].sort((a, b) => b.likes - a.likes);
-  } else {
-    return [...comments.value].sort((a, b) => b.timestamp - a.timestamp);
+const props = defineProps({
+  postId: {
+    type: [String, Number],
+    required: true
   }
 });
 
-// 发送新评论
-const handleSendComment = (newComment) => {
-  comments.value.unshift({
-    id: comments.value.length + 1,
-    content: newComment,
-    likes: 0,
-    replies: 0,
-    timestamp: Date.now(),
-  });
-};
+const visibleDrawer = ref(false)
+const comments = ref([])
+const loading = ref(false)
+const sortType = ref('latest') // 'latest' 或 'hot'
+const replyTarget = ref(null) // 当前回复对象
 
-// 点赞评论
-const handleLikeComment = (commentId) => {
-  const comment = comments.value.find((c) => c.id === commentId);
-  if (comment) {
-    comment.likes += 1;
+const userStore = useUserStore()
+
+// 打开抽屉时加载评论
+const open = async () => {
+  visibleDrawer.value = true
+  await fetchComments()
+}
+defineExpose({ open })
+
+// 获取并处理评论数据
+const fetchComments = async () => {
+  loading.value = true
+  try {
+    const res = await getCommentsService(props.postId)
+    comments.value = flattenComments(res.data.list || [])
+  } finally {
+    loading.value = false
   }
-};
+}
+
+// 二级扁平化处理
+function flattenComments(list) {
+  return list.map(top => {
+    const children = []
+    function collect(child, parentUser) {
+      if (!child) return
+      // 只允许一层嵌套，超出部分平铺到children
+      if (child.children && child.children.length > 0) {
+        child.children.forEach(grand => {
+          // 超过2层的回复，内容前加@用户名
+          if (grand.parentId !== top.id) {
+            children.push({
+              ...grand,
+              content: `@${grand.replyToUser?.username || ''} ${grand.content}`,
+              isFlat: true
+            })
+            // 递归收集更深层
+            if (grand.children && grand.children.length > 0) {
+              grand.children.forEach(g => collect(g, grand.user))
+            }
+          } else {
+            children.push({ ...grand, isFlat: false })
+            if (grand.children && grand.children.length > 0) {
+              grand.children.forEach(g => collect(g, grand.user))
+            }
+          }
+        })
+      }
+    }
+    // 只保留第一层和第二层
+    if (top.children && top.children.length > 0) {
+      top.children.forEach(child => {
+        children.push({ ...child, isFlat: false })
+        if (child.children && child.children.length > 0) {
+          child.children.forEach(grand => collect(grand, child.user))
+        }
+      })
+    }
+    return { ...top, children }
+  })
+}
+
+// 排序
+const sortedComments = computed(() => {
+  const arr = [...comments.value]
+  if (sortType.value === 'hot') {
+    arr.sort((a, b) => b.likeCount - a.likeCount)
+  } else {
+    arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  }
+  return arr
+})
+
+// 发送评论/回复
+const handleSendComment = async (content) => {
+  if (!content) return
+  const data = {
+    postId: props.postId,
+    content,
+    userId: userStore.userId
+  }
+  if (replyTarget.value) {
+    data.parentId = replyTarget.value.parentId
+    data.replyToUserId = replyTarget.value.replyToUserId
+  }
+  await createCommentService(data)
+  replyTarget.value = null
+  await fetchComments()
+}
+
+// 回复按钮
+const handleReply = (comment) => {
+  replyTarget.value = {
+    parentId: comment.parentId || comment.id,
+    replyToUserId: comment.user?.id,
+    replyToUserName: comment.user?.username
+  }
+}
+
+// 监听postId变化自动刷新
+watch(() => props.postId, fetchComments)
 </script>
 
 <template>
-  <!-- 抽屉 -->
-  <el-drawer v-model="visibleDrawer" :title="`评论 ${721}`" direction="rtl" size="40%">
+  <el-drawer v-model="visibleDrawer" :title="`评论`" direction="rtl" size="40%">
     <div class="comment-section">
-      <!-- 评论输入区 -->
-      <CommentInput @send-comment="handleSendComment" />
-
-      <!-- 评论列表 -->
-      <div class="comment-list">
-        <el-tabs v-model="sortType" @tab-click="handleSortChange">
-          <el-tab-pane label="最新" name="latest"></el-tab-pane>
-          <el-tab-pane label="热度" name="hot"></el-tab-pane>
-        </el-tabs>
-        <div v-for="comment in sortedComments" :key="comment.id" class="comment-item">
-          <p>{{ comment.content }}</p>
-          <div class="comment-actions">
-            <el-button type="text" @click="handleLikeComment(comment.id)">
-              <Icon icon="prime:thumbs-up-fill" /> {{ comment.likes }}
-            </el-button>
-            <el-button type="text">
-              <Icon icon="mdi-light:comment-text" /> {{ comment.replies }}
-            </el-button>
-          </div>
-        </div>
-      </div>
+      <CommentInput @send-comment="handleSendComment" :replyTarget="replyTarget" />
+      <CommentList
+        :comments="sortedComments"
+        @reply="handleReply"
+        @like-comment="handleLikeComment"
+      />
     </div>
   </el-drawer>
 </template>
