@@ -19,11 +19,13 @@ const getChannelList = async () => {
   channelList.value = res.data.categories
 }
 getChannelList()
+
+// 用watch观测modelValue的变化
 </script>
 <template>
   <el-select :style="{ width }" placeholder="请选择" :modelValue="modelValue"
     @update:modelValue="emit('update:modelValue', $event)">
-    <el-option v-for="channel in channelList" :key="channel.id" :label="channel.categoryName"
+    <el-option v-for="channel in channelList" :key="channel.categoryId" :label="channel.categoryName"
       :value="channel.categoryId"></el-option>
   </el-select>
 </template>

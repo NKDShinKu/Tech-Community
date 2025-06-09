@@ -18,7 +18,7 @@ const getCategoryList = async () => {
 getCategoryList()
 
 const userStore = useUserStore()
-userStore.getUser(userStore.userId)
+
 
 
 // 置顶功能
@@ -66,8 +66,8 @@ const scrollToTop = () => {
     <!-- 右侧个人信息栏 -->
     <div class="sidebar-right">
       <div class="profile-content">
-        <el-avatar :size="100" :src="userStore.userInfo.avatar || '/public/default.png'" />
-        <h3>{{ userStore.userInfo.username || '游客模式' }}</h3>
+        <el-avatar :size="100" :src="userStore.userInfo?.avatar || '/public/default.png'" />
+        <h3>{{ userStore.userInfo?.username || '游客模式' }}</h3>
         <p>一个热爱编程的开发者</p>
         <div class="stats">
           <span>文章: 25</span>

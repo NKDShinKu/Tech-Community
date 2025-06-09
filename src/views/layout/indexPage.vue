@@ -20,7 +20,7 @@
       <router-link v-if="userStore.token" to="/user" :class="{ active: $route.path.includes('/user') }" class="nav-item">
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span>
-            <el-avatar :src="userStore.userInfo.avatar || '/public/default.png'" />
+            <el-avatar :src="userStore.userInfo?.avatar || '/public/default.png'" />
           </span>
           <template #dropdown>
             <el-dropdown-menu>
