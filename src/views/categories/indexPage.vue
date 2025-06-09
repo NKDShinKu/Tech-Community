@@ -1,27 +1,35 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import ArticleCard from '../../components/ArticleCard.vue'
+import { artGetChannelsService, GetArticleListService } from '@/api/article.js'
 
 const route = useRoute()
 
-const categoryList = [
-  { id: '', name: '全部' },
-  { id: '1', name: '生活相关' },
-  { id: '2', name: '后端' },
-  { id: '3', name: '网络' },
-  { id: '4', name: '前端' },
-  { id: '5', name: '算法' },
-  { id: '6', name: '计算机' },
-  { id: '7', name: '数据库' }
-]
+const categoryList = ref([])
+const articleList = ref([])
+
+const getCategoryList = async () => {
+  const res = await artGetChannelsService()
+  categoryList.value = res.data.categories
+}
+
+const getArticleList = async (params) => {
+  const res = await GetArticleListService(params)
+  articleList.value = res.data.items
+  console.log('文章列表:', res.data)
+}
+
+getArticleList({ page: 1, limit: 10 }) // 初始加载文章列表
+
+getCategoryList()
 
 // 从路由中获取 id（比如 /article/2）
 const categoryId = computed(() => String(route.params.id))
 // 根据 id 查找对应的分类名称
 const categoryName = computed(() => {
-  const category = categoryList.find((item) => item.id === categoryId.value)
-  return category ? category.name : '未知分类'
+  const category = categoryList.value.find((item) => String(item.categoryId) === categoryId.value)
+  return category ? category.categoryName : '全部'
 })
 </script>
 
@@ -30,7 +38,7 @@ const categoryName = computed(() => {
     <!-- 标题 -->
     <h2 class="title">{{ categoryName }}</h2>
     <div class="loading" v-if="loading">加载中...</div>
-    <ArticleCard v-for="i in 10"   :key="i"></ArticleCard>
+    <ArticleCard v-for="i in articleList" :data = i  :key="i"></ArticleCard>
   </div>
 </template>
 <style scoped>

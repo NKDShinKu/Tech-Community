@@ -2,26 +2,31 @@
 // 这里可以添加 Vue 组件逻辑
 
 import { useUserStore } from '@/stores'
+import { artGetChannelsService } from '@/api/article.js'
+import { ref } from 'vue'
+
+const categoryList = ref([
+  { categoryId: '', categoryName: '全部' },
+])
+
+const getCategoryList = async () => {
+  const res = await artGetChannelsService()
+  categoryList.value = res.data.categories
+}
+
+
+getCategoryList()
 
 const userStore = useUserStore()
-userStore.getUser(userStore.userInfo.id)
+userStore.getUser(userStore.userId)
 
-console.log(userStore.user)
-const categoryList = [
-  { id: '', name: '全部' },
-  { id: '1', name: '生活相关' },
-  { id: '2', name: '后端' },
-  { id: '3', name: '网络' },
-  { id: '4', name: '前端' },
-  { id: '5', name: '算法' },
-  { id: '6', name: '计算机' },
-  { id: '7', name: '数据库' }
-]
 
 // 置顶功能
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' }) // 平滑滚动到顶部
 }
+
+
 </script>
 
 <template>
@@ -32,14 +37,22 @@ const scrollToTop = () => {
       <el-scrollbar height="90%">
         <div class="category-list">
           <router-link
-            :class="{ active: item.id === $route.params.id }"
+            :class="{ active: !$route.params.id  }"
             class="category-item"
-            v-for="item in categoryList"
-            :to="`/articles/${item.id}`"
-            :key="item.id"
+            :to="`/articles/`"
             @click="scrollToTop"
           >
-            <p>{{ item.name }}</p>
+            <p>全部</p>
+          </router-link>
+          <router-link
+            :class="{ active: String(item.categoryId) === $route.params.id }"
+            class="category-item"
+            v-for="item in categoryList"
+            :to="`/articles/${item.categoryId}`"
+            :key="item.categoryId"
+            @click="scrollToTop"
+          >
+            <p>{{ item.categoryName }}</p>
           </router-link>
         </div>
       </el-scrollbar>

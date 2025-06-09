@@ -23,9 +23,10 @@ export const DelArticleService = (id) =>
   request.delete(`/posts/${id}`)
 
 // 获取文章列表
-export const GetArticleListService = (page, limit) =>
-  request.get('/api/posts/list/approved', { params:{page, limit} } )
+export const GetArticleListService = ({ page, limit }) =>
+  request.get('/posts/list/approved', { params: { page, limit } })
 
 // 查看文章详情
 export const GetArticleDetailService = (id) =>
   request.get(`/posts/${id}`)
+

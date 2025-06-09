@@ -26,16 +26,16 @@ defineProps({
       <div class="content">
         <h3 class="title">{{ data.title }}</h3>
         <div class="article">
-          {{ data.desc }}
+          Vue 是一个框架，也是一个生态。其功能覆盖了大部分前端开发常见的需求。但 Web 世界是很 diverse 的，不同的开发者在 Web 上构建的东西可能在形式和规模上会有很大的不同。考虑到这一点，Vue 的设计非常注重灵活性和“可以被逐步集成”这个特点。根据你的需求场景，你可以用不同的方式使用 Vue：
         </div>
         <div class="information">
           <span class="time">
             <Icon icon="material-symbols-light:date-range-outline-sharp" />
-            {{ data.time }}
+            {{ data.date }}
           </span>
           <span class="author">
             <Icon icon="material-symbols:person-outline" />
-            {{ data.author }}
+            {{ data.author.username }}
           </span>
           <span class="views">
             <Icon icon="fluent-mdl2:view" />
