@@ -147,7 +147,7 @@ const onSuccess = (type) => {
       </el-table-column>
       <el-table-column label="状态">
         <template #default="{ row }">
-          <el-tag :type="getTravelNoteStatus(Number(row.quickTag)) === 'pending'? '' : getTravelNoteStatus(Number(row.quickTag)) === 'approved' ? 'success' : 'danger'">{{ getTravelNoteStatus(Number(row.quickTag)) }}</el-tag>
+          <el-tag :type="getTravelNoteStatus(Number(row.quickTag)) === 'pending'? 'primary' : getTravelNoteStatus(Number(row.quickTag)) === 'approved' ? 'success' : 'danger'">{{ getTravelNoteStatus(Number(row.quickTag)) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100">

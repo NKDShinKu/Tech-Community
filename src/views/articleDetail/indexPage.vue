@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import commentsCard from './components/CommentsCard.vue'
 import { GetArticleDetailService } from '@/api/article.js'
 import { useRoute } from 'vue-router'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const commentsCardRef = ref(null)
 const liked = ref(false)
@@ -41,6 +43,14 @@ getPostDetail(articleId)
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' }) // 平滑滚动到顶部
 }
+
+const editorOptions = {
+  modules: {
+    toolbar: false, // 将 toolbar 设置为 false 隐藏工具栏
+  },
+  theme: 'snow', // 可选主题：'snow' 或 'bubble'
+  readOnly : true, // 设置为只读模式
+}
 </script>
 <template>
 
@@ -62,7 +72,6 @@ const scrollToTop = () => {
     <!-- 中间栏：文章内容 -->
     <div class="middle-column">
       <!-- 封面图 -->
-      <img v-if="postDetail.coverImage" :src="postDetail.coverImage" alt="cover" style="width:100%;border-radius:8px;margin-bottom:16px;" />
       <h1>{{ postDetail.title }}</h1>
       <div style="color:#888;font-size:14px;margin-bottom:12px;">
         <span>发布于 {{ new Date(postDetail.date).toLocaleString() }}</span>
@@ -71,7 +80,9 @@ const scrollToTop = () => {
       <div style="margin-bottom: 24px;">
         <el-tag v-if="postDetail.quick_tag" type="info">标签: {{ postDetail.quick_tag }}</el-tag>
       </div>
-      <div v-html="postDetail.content"></div>
+      <div class="editor">
+        <quill-editor :options="editorOptions" v-model:content="postDetail.content" contentType="html"> </quill-editor>
+      </div>
     </div>
 
     <!-- 右侧栏：作者信息 -->

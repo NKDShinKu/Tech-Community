@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import ChannelSelect from './ChannelSelect.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { AddArticleService, GetArticleDetailService } from '@/api/article.js'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import axios from 'axios'
+import {  userUploadFileService } from '@/api/user.js'
 
 // 默认数据
 const defaultForm = {
@@ -13,11 +13,17 @@ const defaultForm = {
   category: '',
   coverImage: '',
   content: '',
+  description: ''
 }
 const visibleDrawer = ref(false)
 const formModel = ref({ ...defaultForm })
 const editorRef = ref()
-
+function getDescriptionFromContent(content, length = 50) {
+  // 去除 HTML 标签
+  const text = content.replace(/<[^>]+>/g, '')
+  // 截取前 length 个字符
+  return text.slice(0, length)
+}
 // 菜单打开与判断
 const open = async (row) => {
   visibleDrawer.value = true
@@ -26,25 +32,23 @@ const open = async (row) => {
     const res = await GetArticleDetailService(row.id)
     formModel.value = res.data
     formModel.value.category = res.data.category.categoryId
-
-    imgUrl.value = formModel.value.coverImg
-    // 提交给后台，需要的是 file 格式的，将网络图片，转成 file 格式
-    // 网络图片转成 file 对象, 需要转换一下
-    formModel.value.coverImg = await imageUrlToFile(imgUrl.value, formModel.value.coverImg)
   } else {
     console.log('添加功能')
     formModel.value = { ...defaultForm }
-    imgUrl.value = ''
+    await nextTick()
     editorRef.value.setHTML('')
   }
 }
 
 // 图片上传逻辑
-const imgUrl = ref('')
-const onUploadFile = (uploadFile) => {
-  imgUrl.value = URL.createObjectURL(uploadFile.raw)
-  formModel.value.cover_img = uploadFile.raw
-  console.log('img:',formModel.value.cover_img)
+const onUploadFile = async (uploadFile) => {
+  try {
+    const res = await userUploadFileService(uploadFile)
+    formModel.value.coverImage = res.data.cdnUrl
+    ElMessage({ type: 'success', message: '图片上传成功' })
+  } catch (error) {
+    ElMessage({ type: 'error', message: '图片上传失败' })
+  }
 }
 defineExpose({
   open
@@ -56,12 +60,14 @@ const onPublish = async () => {
 
   if (formModel.value.id) {
     console.log('编辑操作')
+    formModel.value.description = getDescriptionFromContent(formModel.value.content, 50)
     await AddArticleService(formModel.value)
     ElMessage.success('编辑成功')
     visibleDrawer.value = false
     emit('success', 'edit')
   } else {
     // 添加请求
+    formModel.value.description = getDescriptionFromContent(formModel.value.content, 50)
     await AddArticleService(formModel.value)
     ElMessage.success('添加成功')
     visibleDrawer.value = false
@@ -69,24 +75,6 @@ const onPublish = async () => {
   }
 }
 
-async function imageUrlToFile(url, fileName) {
-  try {
-    // 第一步：使用axios获取网络图片数据
-    const response = await axios.get(url, { responseType: 'arraybuffer' })
-    const imageData = response.data
-
-    // 第二步：将图片数据转换为Blob对象
-    const blob = new Blob([imageData], { type: response.headers['content-type'] })
-
-    // 第三步：创建一个新的File对象
-    const file = new File([blob], fileName, { type: blob.type })
-
-    return file
-  } catch (error) {
-    console.error('将图片转换为File对象时发生错误:', error)
-    throw error
-  }
-}
 </script>
 
 <template>
@@ -102,13 +90,13 @@ async function imageUrlToFile(url, fileName) {
       </el-form-item>
       <el-form-item label="文章封面" prop="cover_img">
         <el-upload class="avatar-uploader" :auto-upload="false" :show-file-list="false" :on-change="onUploadFile">
-          <img alt="封面" v-if="imgUrl" :src="imgUrl" class="avatar" />
+          <img alt="封面" v-if="formModel.coverImage" :src="formModel.coverImage" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
       <el-form-item label="文章内容" prop="content">
         <div class="editor">
-          <quill-editor theme="snow" v-model:content="formModel.content" contentType="html" ref="editorRef" toolbar="full"> </quill-editor>
+          <quill-editor theme="snow" v-model:content="formModel.content" contentType="html" ref="editorRef" toolbar="essential"> </quill-editor>
         </div>
       </el-form-item>
       <el-form-item>

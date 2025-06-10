@@ -1,6 +1,15 @@
 <script setup>
-import cardImg from '@/assets/card.jpg'
+import cardImg from '/public/akarin.png'
 import dayjs from 'dayjs'
+
+const defaultContent = {
+  title: '渐进式框架',
+  time: '2024-07-21',
+  description:
+    'Vue 是一个框架，也是一个生态。其功能覆盖了大部分前端开发常见的需求。但 Web 世界是很 diverse 的，不同的开发者在 Web 上构建的东西可能在形式和规模上会有很大的不同。考虑到这一点，Vue 的设计非常注重灵活性和“可以被逐步集成”这个特点。根据你的需求场景，你可以用不同的方式使用 Vue：',
+  img: cardImg,
+}
+
 
 defineProps({
   data: {
@@ -31,7 +40,7 @@ function formatDate(dateStr) {
       <div class="content">
         <h3 class="title">{{ data.title }}</h3>
         <div class="article">
-          {{data.description}}
+          {{data.description || defaultContent.description}}
         </div>
         <div class="information">
           <span class="time">
@@ -54,7 +63,7 @@ function formatDate(dateStr) {
       </div>
 
       <div class="image">
-        <img :src=data.coverImage alt="" />
+        <img :src="data.coverImage || cardImg" alt="3123123" />
       </div>
 
     </RouterLink>
@@ -77,7 +86,8 @@ function formatDate(dateStr) {
 
   a {
     display: flex;
-    justify-content: space-around;
+    width: 100%;
+    justify-content: space-between;
     align-items: center;
   }
 
