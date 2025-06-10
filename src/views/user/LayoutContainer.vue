@@ -23,6 +23,7 @@
           <el-menu-item index="/user/favorites"><el-icon><Star /></el-icon>收藏</el-menu-item>
 <!--          <el-menu-item index="/user/support"><Icon icon="prime:thumbs-up" style="font-size: 20px" />点赞</el-menu-item>-->
           <el-menu-item index="/user/history"><Icon icon="material-symbols-light:history-2-rounded" style="font-size: 20px" />浏览历史</el-menu-item>
+          <el-button type="danger" class="btn1" v-if="$route.path === '/user/history'" @click="clearHistory">清空浏览历史</el-button>
         </el-menu>
       </el-header>
       <el-main class="main">
@@ -40,13 +41,28 @@
 import { ref } from 'vue'
 import { Document, Star } from '@element-plus/icons-vue'
 import {useUserStore} from '@/stores/index.js'
+import { ClearHistoryService} from '@/api/article.js'
 
+const clearHistory = async () => {
+  try {
+    await ClearHistoryService()
+    // 重新加载网页
+    window.location.reload()
+    isEmpty.value = true
+  } catch (error) {
+    console.error('清空浏览历史失败:', error)
+  }
+}
 const userStore = useUserStore()
 userStore.getUser(userStore.userId)
 const isEmpty = ref(true)
 </script>
 
 <style lang="scss" scoped>
+.btn1 {
+  margin-left: 390px;
+  margin-top: 10px;
+}
 .profile-page {
   padding: 20px;
   width: 1000px;

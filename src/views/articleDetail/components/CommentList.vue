@@ -1,9 +1,5 @@
 <template>
   <div class="comment-list">
-    <el-tabs v-model="sortType" @tab-click="handleSortChange">
-      <el-tab-pane label="最新" name="latest"></el-tab-pane>
-      <el-tab-pane label="热度" name="hot"></el-tab-pane>
-    </el-tabs>
     <div v-for="comment in comments" :key="comment.id" class="comment-item">
       <div class="comment-main">
         <span class="comment-user">{{ comment.user?.username || '匿名' }}</span>
@@ -11,9 +7,6 @@
         <span class="comment-time">{{ formatTime(comment.createdAt) }}</span>
       </div>
       <div class="comment-actions">
-        <el-button type="text" @click="$emit('like-comment', comment.id)">
-          <i class="el-icon-thumb"></i> {{ comment.likeCount || 0 }}
-        </el-button>
         <el-button type="text" @click="$emit('reply', comment)">
           <i class="el-icon-chat-dot-round"></i> 回复
         </el-button>

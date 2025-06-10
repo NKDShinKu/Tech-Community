@@ -36,7 +36,7 @@ function formatDate(dateStr) {
 <template>
   <div class="card">
 <!--    打开新页面-->
-    <RouterLink :to="`/detail/${data.id}`">
+    <RouterLink target="_blank" :to="`/detail/${data.id}`">
 
       <div class="content">
         <h3 class="title">{{ data.title }}</h3>

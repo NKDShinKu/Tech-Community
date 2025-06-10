@@ -41,3 +41,7 @@ export const GetFavoriteService = () =>
 // 获取浏览历史/user-history/detailed
 export const GetHistoryService = () =>
   request.get('/user-history/detailed')
+
+// 清空浏览历史/user-history/clear post
+export const ClearHistoryService = () =>
+  request.post('/user-history/clear')

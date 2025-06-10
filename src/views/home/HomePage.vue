@@ -19,7 +19,9 @@ const getCategoryList = async () => {
 getCategoryList()
 
 const userStore = useUserStore()
-
+if(localStorage.getItem('token')) {
+  userStore.getUser(userStore.userId)
+}
 
 
 // 置顶功能

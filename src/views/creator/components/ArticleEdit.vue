@@ -6,6 +6,7 @@ import { AddArticleService, GetArticleDetailService } from '@/api/article.js'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import {  userUploadFileService } from '@/api/user.js'
+import { getTravelNoteStatus } from '@/utils/quickTag.js'
 
 // 默认数据
 const defaultForm = {
@@ -31,6 +32,7 @@ const open = async (row) => {
     console.log('编辑回显')
     const res = await GetArticleDetailService(row.id)
     formModel.value = res.data
+    console.log('编辑回显数据:', formModel.value)
     formModel.value.category = res.data.category.categoryId
   } else {
     console.log('添加功能')
@@ -82,6 +84,9 @@ const onPublish = async () => {
   <el-drawer v-model="visibleDrawer" :title="formModel.id ? '编辑文章' : '添加文章'" direction="rtl" size="50%">
     <!-- 发表文章表单 -->
     <el-form :model="formModel" ref="formRef" label-width="100px">
+      <el-form-item class="rejected" v-if="getTravelNoteStatus(Number(formModel.quick_tag)) === 'rejected'" label="拒绝原因" >
+        {{ formModel.rejectReason }}
+      </el-form-item>
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
@@ -106,6 +111,10 @@ const onPublish = async () => {
   </el-drawer>
 </template>
 <style lang="scss" scoped>
+.rejected {
+  color: red;
+  font-weight: bold;
+}
 .avatar-uploader {
   :deep() {
     .avatar {

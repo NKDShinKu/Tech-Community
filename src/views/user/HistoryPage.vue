@@ -18,6 +18,10 @@ onMounted(() => {
 <template>
   <div class="container">
     <ArticleCard v-for="i in favoriteList" :data = i :key="i" />
+<!--    空状态-->
+    <div v-if="!favoriteList.length" class="loading">
+      <p>暂无浏览记录</p>
+    </div>
   </div>
 </template>
 

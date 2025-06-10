@@ -5,8 +5,10 @@ import { GetArticleDetailService } from '@/api/article.js'
 import request from '@/utils/request'
 import { useRoute } from 'vue-router'
 import { QuillEditor } from '@vueup/vue-quill'
+import { useUserStore} from '@/stores/index.js'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
+const userStore = useUserStore()
 const commentsCardRef = ref(null)
 const liked = ref(false)
 const favorited = ref(false)
@@ -32,7 +34,10 @@ const addHistory = async () => {
     console.error('添加浏览历史失败:', error)
   }
 }
-addHistory()
+if(userStore.token) {
+  addHistory()
+}
+
 
 const OpenComments = () => {
   commentsCardRef.value.open()
@@ -91,7 +96,7 @@ const editorOptions = {
         <span style="margin-left:16px;">浏览 {{ postDetail.viewCount }}</span>
       </div>
       <div style="margin-bottom: 24px;">
-        <el-tag v-if="postDetail.quick_tag" type="info">标签: {{ postDetail.quick_tag }}</el-tag>
+        <el-tag  type="info"> {{ postDetail.category.categoryName }}</el-tag>
       </div>
       <div class="editor">
         <quill-editor :options="editorOptions" v-model:content="postDetail.content" contentType="html"> </quill-editor>
