@@ -67,7 +67,8 @@ const onUpdateAvatar = async () => {
     const res = await userUploadFileService(nowFile.value)
     user.value = {
       ...user.value,
-      avatar: res.data.cdnUrl
+      avatar: res.data.cdnUrl,
+      id: userStore.userId
     }
     await userUpdateInfoService(user.value)
     await userStore.getUser(userStore.userId)

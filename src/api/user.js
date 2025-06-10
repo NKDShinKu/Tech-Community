@@ -13,8 +13,8 @@ export const userGetInfoService = (id) => request.get(`/user/info/${id}`)
 
 
 // 更新个人信息
-export const userUpdateInfoService = ({ avatar, email, password }) =>
-  request.post('/user/update-info/', { avatar, email, password })
+export const userUpdateInfoService = ({ avatar, email, password, id }) =>
+  request.post(`/user/update-info/?id=${id}`, { avatar, email, password })
 
 // 上传文件
 // user.js
