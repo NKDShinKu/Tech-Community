@@ -82,6 +82,7 @@ request.interceptors.response.use(
           refreshToken,
         });
 
+        console.log('token',data)
         // 存储新的 token
         localStorage.setItem('token', data.token);
         localStorage.setItem('refreshToken', data.refreshToken);

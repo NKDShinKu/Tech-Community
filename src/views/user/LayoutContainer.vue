@@ -6,9 +6,9 @@
         <img class="avatar" :src="userStore.userInfo.avatar||'/public/default.png'" />
         <div class="info">
           <div class="name">{{ userStore.userInfo.username }}</div>
-          <div class="meta">
-            <p>+ 你从事什么职业?</p>
-          </div>
+<!--          <div class="meta">-->
+<!--            <p>+ 你从事什么职业?</p>-->
+<!--          </div>-->
         </div>
         <router-link to="/user/setting"><el-button class="setting-btn" type="primary">设定中心</el-button></router-link>
 

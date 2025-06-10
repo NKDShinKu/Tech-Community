@@ -15,7 +15,7 @@
       </router-link>
     </div>
     <div class="nav-right">
-      <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />
+<!--      <input type="text" v-model="searchQuery" placeholder="搜索..." class="search-box" />-->
 
       <router-link v-if="userStore.token" to="/user" :class="{ active: $route.path.includes('/user') }" class="nav-item">
         <el-dropdown placement="bottom-end" @command="handleCommand">
@@ -27,7 +27,7 @@
               <el-dropdown-item command="setting"><Icon icon="hugeicons:setting-07" style="font-size: 18px" />设定中心</el-dropdown-item>
               <el-dropdown-item command="article"><el-icon><Document /></el-icon>我的文章</el-dropdown-item>
               <el-dropdown-item command="favorites"><el-icon><Star /></el-icon>我的收藏</el-dropdown-item>
-              <el-dropdown-item command="support"><Icon icon="prime:thumbs-up" style="font-size: 18px" />我的点赞</el-dropdown-item>
+<!--              <el-dropdown-item command="support"><Icon icon="prime:thumbs-up" style="font-size: 18px" />我的点赞</el-dropdown-item>-->
               <el-dropdown-item command="history"><Icon icon="material-symbols-light:history-2-rounded" style="font-size: 18px" />浏览历史</el-dropdown-item>
               <el-dropdown-item command="logout"><Icon icon="quill:off" style="font-size: 16px" />退出登录</el-dropdown-item>
             </el-dropdown-menu>

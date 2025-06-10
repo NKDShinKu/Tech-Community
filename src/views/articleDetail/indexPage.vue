@@ -77,7 +77,7 @@ const editorOptions = {
     <!-- 左侧栏：点赞、评论、收藏按钮 -->
     <div class="left-column">
       <!-- 点赞 -->
-      <div class="icon"><Icon icon="prime:thumbs-up-fill" class="icon-btn" :class="{ active: liked }" @click="toggleLike" /></div>
+<!--      <div class="icon"><Icon icon="prime:thumbs-up-fill" class="icon-btn" :class="{ active: liked }" @click="toggleLike" /></div>-->
 
       <!-- 收藏 -->
       <div class="icon"><Icon icon="uim:favorite" class="icon-btn" :class="{ active: favorited }" @click="toggleFavorite()" /></div>

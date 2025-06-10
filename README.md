@@ -1,31 +1,108 @@
-## Recommended IDE Setup
+# 大旅游 - 旅游文章分享平台
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 项目概述
 
-## Customize configuration
+大旅游是一个专注于旅游内容分享的平台，用户可以浏览、发布、收藏旅游文章，并进行互动。平台分为普通用户和创作者两种角色，提供了完整的内容消费和创作体验。
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## 功能需求
 
-## Project Setup
+### 用户功能
+- **浏览文章**：查看首页推荐文章，按类别筛选
+- **文章详情**：阅读完整文章内容，查看图文
+- **用户中心**：
+    - 收藏管理：收藏/取消收藏文章
+    - 浏览历史：查看已阅读过的文章
+    - 支持记录：查看已点赞的文章
+- **个人设置**：
+    - 个人资料修改
+    - 密码修改
 
-```sh
-pnpm install
+### 创作者功能
+- **创作中心**：
+    - 数据概览：查看文章发布、阅读、收藏等数据统计
+    - 文章管理：发布、编辑、删除文章
+    - 频道管理：创建和管理文章分类
+
+### 用户认证
+- 登录/注册
+- Token 认证与刷新机制
+- 权限控制
+
+## 技术栈
+
+### 前端
+- **框架**：Vue 3 + Vite
+- **状态管理**：Pinia
+- **路由**：Vue Router
+- **UI组件库**：Element Plus
+- **HTTP请求**：Axios
+- **富文本编辑器**：Quill Editor
+
+### 后端
+- **服务器**：Node.js (localhost:3000)
+- **API设计**：RESTful API
+- **认证方式**：JWT (Token + RefreshToken)
+
+### 项目结构
+```
+src/
+├── api/                # API 请求模块
+├── assets/             # 静态资源
+├── components/         # 公共组件
+├── router/             # 路由配置
+├── stores/             # Pinia 状态管理
+├── utils/              # 工具函数
+└── views/              # 页面组件
+    ├── articleDetail/  # 文章详情
+    ├── categories/     # 分类页面
+    ├── creator/        # 创作者中心
+    ├── home/           # 首页
+    ├── layout/         # 布局组件
+    ├── login/          # 登录页
+    ├── setting/        # 设置页面
+    └── user/           # 用户中心
 ```
 
-### Compile and Hot-Reload for Development
+## 开发环境与部署
 
-```sh
+### 开发环境
+- **Node.js**: 14.x 或更高版本
+- **包管理工具**: pnpm
+
+### 本地开发
+```bash
+# 安装依赖
+pnpm install
+
+# 启动开发服务器
 pnpm dev
 ```
 
-### Compile and Minify for Production
-
-```sh
+### 生产环境构建
+```bash
+# 构建生产版本
 pnpm build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## API 通信
 
-```sh
-pnpm lint
-```
+项目使用 Axios 封装的请求模块，支持：
+- 请求/响应拦截
+- Token 认证
+- 401 状态自动刷新 Token
+- 错误处理
+
+## 项目特点
+
+1. **组件化开发**：模块化设计，提高代码复用性
+2. **响应式布局**：适配不同设备屏幕
+3. **权限控制**：基于路由的权限管理
+4. **前端分页**：结合 Element Plus 分页组件实现前端分页
+5. **富文本编辑**：支持图文混排的文章编辑
+
+## 开发注意事项
+
+1. 所有 API 请求需通过 `/api` 代理
+2. 登录后获取的 Token 和 RefreshToken 存储在 localStorage
+3. 创作者发布文章时，description 字段会自动从内容中提取纯文本
+4. Element Plus 组件的属性需要按照文档规范使用，避免类型错误

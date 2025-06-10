@@ -19,7 +19,7 @@ const getCategoryList = async () => {
 getCategoryList()
 
 const userStore = useUserStore()
-if(localStorage.getItem('token')) {
+if(localStorage.getItem('refreshToken')) {
   userStore.getUser(userStore.userId)
 }
 
