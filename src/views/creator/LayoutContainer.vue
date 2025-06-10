@@ -24,7 +24,7 @@ onMounted(() => {
             </el-icon>
             总览
           </el-menu-item>
-          <el-menu-item index="/creator/channel">
+          <el-menu-item v-if="userStore.userId === '1'" index="/creator/channel">
             <el-icon>
               <Management />
             </el-icon>

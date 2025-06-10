@@ -21,7 +21,7 @@
         <el-menu :default-active="$route.path" mode="horizontal" router>
           <el-menu-item index="/user/article"><el-icon><Document /></el-icon> 文章</el-menu-item>
           <el-menu-item index="/user/favorites"><el-icon><Star /></el-icon>收藏</el-menu-item>
-          <el-menu-item index="/user/support"><Icon icon="prime:thumbs-up" style="font-size: 20px" />点赞</el-menu-item>
+<!--          <el-menu-item index="/user/support"><Icon icon="prime:thumbs-up" style="font-size: 20px" />点赞</el-menu-item>-->
           <el-menu-item index="/user/history"><Icon icon="material-symbols-light:history-2-rounded" style="font-size: 20px" />浏览历史</el-menu-item>
         </el-menu>
       </el-header>

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import commentsCard from './components/CommentsCard.vue'
 import { GetArticleDetailService } from '@/api/article.js'
+import request from '@/utils/request'
 import { useRoute } from 'vue-router'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -17,9 +18,21 @@ const articleId = route.params.id
 const toggleLike = () => {
   liked.value = !liked.value
 }
-const toggleFavorite = () => {
+const toggleFavorite = async () => {
+  const res = await request.post('/user-favorites/toggle', {data: {postId:articleId}}  )
+  console.log('312312',res)
   favorited.value = !favorited.value
 }
+
+const addHistory = async () => {
+  try {
+    const res = await request.post('/user-history/', { data: { recordId: articleId } })
+    console.log('添加浏览历史成功:', res)
+  } catch (error) {
+    console.error('添加浏览历史失败:', error)
+  }
+}
+addHistory()
 
 const OpenComments = () => {
   commentsCardRef.value.open()
@@ -62,7 +75,7 @@ const editorOptions = {
       <div class="icon"><Icon icon="prime:thumbs-up-fill" class="icon-btn" :class="{ active: liked }" @click="toggleLike" /></div>
 
       <!-- 收藏 -->
-      <div class="icon"><Icon icon="uim:favorite" class="icon-btn" :class="{ active: favorited }" @click="toggleFavorite" /></div>
+      <div class="icon"><Icon icon="uim:favorite" class="icon-btn" :class="{ active: favorited }" @click="toggleFavorite()" /></div>
 
       <!-- 评论 -->
       <div class="icon" @click="OpenComments" ><Icon icon="mdi-light:comment-text" class="icon-btn" /></div>

@@ -30,3 +30,14 @@ export const GetArticleListService = ({ page, limit }) =>
 export const GetArticleDetailService = (id) =>
   request.get(`/posts/${id}`)
 
+// 添加收藏 /user-favorites/toggle
+export const AddFavoriteService = (data) =>
+  request.post(`/user-favorites/toggle`, data)
+
+// 获取收藏/user-favorites/detailed
+export const GetFavoriteService = () =>
+  request.get('/user-favorites/detailed')
+
+// 获取浏览历史/user-history/detailed
+export const GetHistoryService = () =>
+  request.get('/user-history/detailed')

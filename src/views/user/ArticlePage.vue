@@ -1,17 +1,21 @@
 <script setup>
 import ArticleCard from '@/components/ArticleCard.vue'
+import { GetArticlesService } from '@/api/article.js'
 import { ref } from 'vue'
-const count = ref(10)
-const load = () => {
-  count.value += 2
-  console.log('dasdasdas')
+
+const articleList = ref([])
+
+const getArticleList = async () => {
+  const res = await GetArticlesService()
+  console.log('文章列表:', res.data)
+  articleList.value = res.data
 }
+getArticleList()
 </script>
 
 <template>
-  <div v-infinite-scroll="load" class="container">
-    <div class="loading" v-if="count.value === 0">加载中...</div>
-    <ArticleCard v-for="i in count" :key="i" />
+  <div class="container">
+    <ArticleCard v-for="i in articleList" :data = i :key="i" />
   </div>
 </template>
 

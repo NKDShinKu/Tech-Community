@@ -31,6 +31,16 @@ const categoryName = computed(() => {
   const category = categoryList.value.find((item) => String(item.categoryId) === categoryId.value)
   return category ? category.categoryName : '全部'
 })
+
+const fileteredArticles = computed(() => {
+  return articleList.value.filter(article => {
+    if(categoryId.value) {
+      return String(article.category.categoryId) === categoryId.value
+    } else {
+      return true // 如果没有指定分类，则返回所有文章
+    }
+  })
+})
 </script>
 
 <template>
@@ -38,7 +48,7 @@ const categoryName = computed(() => {
     <!-- 标题 -->
     <h2 class="title">{{ categoryName }}</h2>
     <div class="loading" v-if="loading">加载中...</div>
-    <ArticleCard v-for="i in articleList" :data = i  :key="i"></ArticleCard>
+    <ArticleCard v-for="i in fileteredArticles" :data = i  :key="i"></ArticleCard>
   </div>
 </template>
 <style scoped>

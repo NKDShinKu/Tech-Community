@@ -8,6 +8,7 @@ const defaultContent = {
   description:
     'Vue 是一个框架，也是一个生态。其功能覆盖了大部分前端开发常见的需求。但 Web 世界是很 diverse 的，不同的开发者在 Web 上构建的东西可能在形式和规模上会有很大的不同。考虑到这一点，Vue 的设计非常注重灵活性和“可以被逐步集成”这个特点。根据你的需求场景，你可以用不同的方式使用 Vue：',
   img: cardImg,
+  author: 'admin',
 }
 
 
@@ -49,7 +50,7 @@ function formatDate(dateStr) {
           </span>
           <span class="author">
             <Icon icon="material-symbols:person-outline" />
-            {{ data.author.username }}
+            {{ data.author?.username || defaultContent.author }}
           </span>
           <span class="views">
             <Icon icon="fluent-mdl2:view" />
